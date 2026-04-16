@@ -14,6 +14,7 @@ async function bootstrap(forceRefresh = false) {
     .then((data) => {
       const app = getApp()
       app.setUserInfo(data.user)
+      app.setPartnerInfo(data.partner || null)
       app.setCoupleInfo(data.couple, data.isBound)
       return data
     })

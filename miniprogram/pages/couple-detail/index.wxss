@@ -1,0 +1,233 @@
+/* pages/couple-detail/index.wxss */
+
+/* 头部双人信息卡片 */
+.header-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.couple-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  background: #f5f5f5;
+}
+
+.couple-name {
+  font-size: 26rpx;
+  color: #666;
+  max-width: 130rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.center-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.heart-icon {
+  font-size: 48rpx;
+}
+
+.days-big {
+  font-size: 80rpx;
+  font-weight: 700;
+  color: #ff7eb3;
+  line-height: 1;
+}
+
+.days-label {
+  font-size: 28rpx;
+  color: #ff7eb3;
+  font-weight: 500;
+}
+
+/* 日期卡片 */
+.date-card {
+  padding-top: 28rpx;
+  padding-bottom: 28rpx;
+}
+
+.date-label {
+  font-size: 24rpx;
+  color: #aaa;
+  margin-bottom: 12rpx;
+}
+
+.date-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.date-value {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.date-edit {
+  font-size: 24rpx;
+  color: #ff7eb3;
+}
+
+/* 纪念日列表 */
+.section-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.add-btn {
+  font-size: 26rpx;
+  color: #ff7eb3;
+  padding: 4rpx 16rpx;
+  border: 1rpx solid #ff7eb3;
+  border-radius: 30rpx;
+}
+
+.anniv-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+  gap: 12rpx;
+}
+
+.anniv-item:last-child {
+  border-bottom: none;
+}
+
+.anniv-main {
+  flex: 1;
+}
+
+.anniv-title {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.anniv-date {
+  font-size: 22rpx;
+  color: #bbb;
+  margin-top: 4rpx;
+}
+
+.anniv-days {
+  font-size: 24rpx;
+  min-width: 120rpx;
+  text-align: right;
+}
+
+.anniv-days.past {
+  color: #ff7eb3;
+}
+
+.anniv-days.future {
+  color: #6cb0ff;
+}
+
+.anniv-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.action-btn {
+  font-size: 24rpx;
+  color: #aaa;
+}
+
+.action-btn.del {
+  color: #f66;
+}
+
+/* 弹窗 */
+.modal-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 100;
+}
+
+.modal-box {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 40rpx 40rpx 60rpx;
+  z-index: 101;
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-bottom: 36rpx;
+}
+
+.form-item {
+  margin-bottom: 28rpx;
+}
+
+.form-label {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 10rpx;
+}
+
+.form-input {
+  border-bottom: 1rpx solid #eee;
+  padding: 10rpx 0;
+  font-size: 30rpx;
+  color: #333;
+  width: 100%;
+}
+
+.form-picker {
+  border-bottom: 1rpx solid #eee;
+  padding: 10rpx 0;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.modal-btns {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 40rpx;
+}
+
+.btn-cancel {
+  flex: 1;
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  border-radius: 50rpx;
+  font-size: 30rpx;
+  padding: 20rpx;
+}
+
+.btn-confirm {
+  flex: 1;
+  background: #ff7eb3;
+  color: #fff;
+  border: none;
+  border-radius: 50rpx;
+  font-size: 30rpx;
+  padding: 20rpx;
+}

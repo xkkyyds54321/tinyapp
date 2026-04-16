@@ -7,7 +7,8 @@
     "pages/gallery/recycle",
     "pages/anniversaries/index",
     "pages/messages/index",
-    "pages/profile/index"
+    "pages/profile/index",
+    "pages/couple-detail/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

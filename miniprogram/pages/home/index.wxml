@@ -9,11 +9,25 @@
   <!-- 错误态 -->
   <view class="error-wrap" wx:elif="{{error}}">
     <view class="error-text">{{error}}</view>
-    <button class="btn-secondary" bindtap="onLoad" style="width:240rpx">重试</button>
+    <button class="btn-secondary" bindtap="loadData" style="width:240rpx">重试</button>
   </view>
 
   <!-- 正常内容 -->
   <block wx:else>
+
+    <!-- 大背景封面 -->
+    <view class="cover-wrap" bindtap="onChangeCover">
+      <image
+        class="cover-image"
+        src="{{couple.coverFileID || '/assets/default-cover.png'}}"
+        mode="aspectFill"
+      />
+      <view class="cover-change-hint">
+        <text class="cover-camera-icon">📷</text>
+        <text class="cover-hint-text">换封面</text>
+      </view>
+      <view wx:if="{{changingCover}}" class="cover-uploading">上传中...</view>
+    </view>
 
     <!-- 情侣信息头部 -->
     <view class="couple-header">
@@ -21,9 +35,13 @@
         <image class="avatar" src="{{user.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
         <view class="couple-name">{{user.nickname || '我'}}</view>
       </view>
-      <view class="couple-center">
+      <view class="couple-center" bindtap="goDetail">
         <view class="heart-icon">💕</view>
-        <view wx:if="{{couple.boundAt}}" class="together-days">在一起 {{togetherDays}} 天</view>
+        <view wx:if="{{couple.boundAt}}" class="together-days">
+          在一起 {{togetherDays}} 天
+          <text class="days-arrow">›</text>
+        </view>
+        <view wx:else class="together-days together-days-tap">点击设置日期 ›</view>
       </view>
       <view class="couple-user">
         <image class="avatar" src="{{partner.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
@@ -48,7 +66,7 @@
           wx:for="{{photos}}"
           wx:key="_id"
           class="photo-thumb"
-          src="{{item.thumbUrl || '/assets/photo-placeholder.png'}}"
+          src="{{item.fileID || item.thumbUrl || '/assets/photo-placeholder.png'}}"
           mode="aspectFill"
           bindtap="goGallery"
         />

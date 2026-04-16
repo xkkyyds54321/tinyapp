@@ -33,24 +33,15 @@ function listRecycleBin(params = {}) {
 }
 
 /**
- * 上传照片到 COS（使用微信云存储上传能力模拟 COS 预签名上传）
- * 实际项目中前端通过 createUploadTicket 返回的 formData + url 直接 POST 到 COS
+ * 上传照片：使用微信云存储 wx.cloud.uploadFile
+ * 上传后返回 fileID，再传给 confirmUpload 写库
  */
 async function uploadToCOS(ticket, filePath, onProgress) {
   return new Promise((resolve, reject) => {
-    const uploadTask = wx.uploadFile({
-      url: ticket.uploadUrl,
+    const uploadTask = wx.cloud.uploadFile({
+      cloudPath: ticket.cosKey,  // 用 cosKey 作为云存储路径
       filePath,
-      name: 'file',
-      header: ticket.headers || {},
-      formData: ticket.formData || {},
-      success: (res) => {
-        if (res.statusCode === 200 || res.statusCode === 204) {
-          resolve(res)
-        } else {
-          reject(new Error(`上传失败: ${res.statusCode}`))
-        }
-      },
+      success: (res) => resolve(res),
       fail: (err) => reject(new Error(err.errMsg || '上传失败'))
     })
     if (onProgress && uploadTask) {

@@ -47,6 +47,7 @@ async function bootstrap(openid) {
 
   let couple = null
   let isBound = false
+  let partner = null
 
   if (user.coupleId) {
     const coupleRes = await db.collection('couples').doc(user.coupleId).get().catch(() => ({ data: null }))
@@ -54,7 +55,25 @@ async function bootstrap(openid) {
     isBound = couple && couple.status === 'active'
   }
 
-  return resp(OK, 'ok', { user, couple, isBound })
+  // 查询 partner 信息
+  if (user.partnerOpenid) {
+    const partnerRes = await users.where({ openid: user.partnerOpenid }).get().catch(() => ({ data: [] }))
+    partner = partnerRes.data[0] || null
+  }
+
+  return resp(OK, 'ok', { user, partner, couple, isBound })
+}
+
+// updateProfile: 保存用户头像和昵称
+async function updateProfile(openid, event) {
+  const { nickname, avatarUrl } = event
+  if (!nickname && !avatarUrl) return resp(UNKNOWN, '缺少参数')
+  const now = Date.now()
+  const updateData = { updatedAt: now }
+  if (nickname !== undefined) updateData.nickname = nickname
+  if (avatarUrl !== undefined) updateData.avatarUrl = avatarUrl
+  await users.where({ openid }).update({ data: updateData })
+  return resp(OK, 'ok')
 }
 
 exports.main = async (event, context) => {
@@ -67,6 +86,8 @@ exports.main = async (event, context) => {
     switch (event.action) {
       case 'bootstrap':
         return await bootstrap(openid)
+      case 'updateProfile':
+        return await updateProfile(openid, event)
       default:
         return resp(UNKNOWN, '未知 action')
     }

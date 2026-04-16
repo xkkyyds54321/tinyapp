@@ -14,6 +14,7 @@ App({
     // 缓存全局状态
     this.globalData = {
       userInfo: null,
+      partnerInfo: null,
       couple: null,
       isBound: false
     }
@@ -22,6 +23,11 @@ App({
   // 设置全局用户信息
   setUserInfo(userInfo) {
     this.globalData.userInfo = userInfo
+  },
+
+  // 设置 partner 信息
+  setPartnerInfo(partner) {
+    this.globalData.partnerInfo = partner
   },
 
   // 设置情侣绑定信息

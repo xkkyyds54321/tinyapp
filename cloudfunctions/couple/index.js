@@ -145,6 +145,26 @@ async function joinCouple(openid, code) {
   return resp(OK, '绑定成功', { couple: updatedCouple.data })
 }
 
+// 更新情侣空间背景图
+async function updateCover(openid, event) {
+  const { fileID } = event
+  if (!fileID) return resp(UNKNOWN, '缺少 fileID')
+  const user = await getUser(openid)
+  if (!user || !user.coupleId) return resp(COUPLE_NOT_BOUND, '请先绑定情侣空间')
+  await couples.doc(user.coupleId).update({ data: { coverFileID: fileID, updatedAt: Date.now() } })
+  return resp(OK, 'ok', { coverFileID: fileID })
+}
+
+// 修改在一起起始日期
+async function updateBoundAt(openid, event) {
+  const { boundAt } = event
+  if (!boundAt || isNaN(boundAt)) return resp(UNKNOWN, '缺少或格式错误 boundAt')
+  const user = await getUser(openid)
+  if (!user || !user.coupleId) return resp(COUPLE_NOT_BOUND, '请先绑定情侣空间')
+  await couples.doc(user.coupleId).update({ data: { boundAt: Number(boundAt), updatedAt: Date.now() } })
+  return resp(OK, 'ok', { boundAt: Number(boundAt) })
+}
+
 // 获取当前情侣信息
 async function getCurrentCouple(openid) {
   const user = await getUser(openid)
@@ -170,6 +190,8 @@ exports.main = async (event, context) => {
       case 'createCouple': return await createCouple(openid)
       case 'joinCouple': return await joinCouple(openid, event.code)
       case 'getCurrentCouple': return await getCurrentCouple(openid)
+      case 'updateCover': return await updateCover(openid, event)
+      case 'updateBoundAt': return await updateBoundAt(openid, event)
       default: return resp(UNKNOWN, '未知 action')
     }
   } catch (err) {

@@ -42,6 +42,7 @@ Page({
       const res = await photoService.listPhotos(params)
       const newList = (res.list || []).map((p) => ({
         ...p,
+        thumbUrl: p.fileID || '',
         timeLabel: dateUtil.formatTimestamp(p.takenAt || p.createdAt, 'MM-DD')
       }))
       this.setData({
@@ -88,7 +89,17 @@ Page({
 
       this.setData({ uploading: true, uploadProgress: 0 })
 
-      // 1. 获取上传凭证
+      // 压缩图片（质量 80%，长边限制 1920px）
+      const compressedPath = await new Promise((resolve) => {
+        wx.compressImage({
+          src: filePath,
+          quality: 80,
+          success: (r) => resolve(r.tempFilePath),
+          fail: () => resolve(filePath) // 压缩失败则用原图
+        })
+      })
+
+      // 1. 获取上传凭证（cosKey、photoId）
       const ticket = await photoService.createUploadTicket({
         filename,
         mimeType,
@@ -96,16 +107,17 @@ Page({
         takenAt: null
       })
 
-      // 2. 上传到 COS
-      await photoService.uploadToCOS(ticket, filePath, (progress) => {
+      // 2. 上传压缩后的图片到微信云存储
+      const uploadRes = await photoService.uploadToCOS(ticket, compressedPath, (progress) => {
         this.setData({ uploadProgress: progress })
       })
 
-      // 3. 确认上传
+      // 3. 确认上传，把 fileID 一并传给云函数写库
       await photoService.confirmUpload({
         photoId: ticket.photoId,
         cosKey: ticket.cosKey,
         thumbnailKey: ticket.thumbnailKey,
+        fileID: uploadRes.fileID || '',
         originalName: filename,
         size: file.size || 0,
         mimeType,

@@ -3,6 +3,7 @@ const authUtil = require('../../utils/auth')
 const exportService = require('../../services/exports')
 const photoService = require('../../services/photos')
 const dateUtil = require('../../utils/date')
+const request = require('../../utils/request')
 const toast = require('../../utils/toast')
 
 Page({
@@ -11,7 +12,8 @@ Page({
     couple: null,
     togetherDays: 0,
     boundAtText: '',
-    storageInfo: null
+    storageInfo: null,
+    nicknameInput: ''
   },
 
   async onShow() {
@@ -31,7 +33,7 @@ Page({
       boundAtText = dateUtil.formatTimestamp(couple.boundAt, 'YYYY-MM-DD')
     }
 
-    this.setData({ user, couple, togetherDays, boundAtText })
+    this.setData({ user, couple, togetherDays, boundAtText, nicknameInput: user.nickname || '' })
     this.loadStorageInfo()
   },
 
@@ -48,6 +50,74 @@ Page({
         }
       })
     } catch (e) {}
+  },
+
+  // 微信头像授权回调
+  async onChooseAvatar(e) {
+    const { avatarUrl } = e.detail
+    if (!avatarUrl) return
+
+    toast.showLoading('保存中...')
+    try {
+      const app = getApp()
+      const user = app.globalData.userInfo || {}
+      const openid = user.openid || `avatar_${Date.now()}`
+
+      // 上传头像到微信云存储
+      const cloudPath = `avatars/${openid}.jpg`
+      const uploadRes = await new Promise((resolve, reject) => {
+        wx.cloud.uploadFile({
+          cloudPath,
+          filePath: avatarUrl,
+          success: resolve,
+          fail: (err) => reject(new Error(err.errMsg || '上传失败'))
+        })
+      })
+
+      // 保存到用户记录
+      await request.auth({ action: 'updateProfile', avatarUrl: uploadRes.fileID })
+
+      // 刷新全局状态
+      await authUtil.refresh()
+      const updatedUser = getApp().globalData.userInfo || {}
+      this.setData({ user: updatedUser })
+
+      wx.hideLoading()
+      toast.showSuccess('头像已更新')
+    } catch (err) {
+      wx.hideLoading()
+      toast.showError(err.message || '保存失败，请重试')
+    }
+  },
+
+  onNicknameInput(e) {
+    this.setData({ nicknameInput: e.detail.value })
+  },
+
+  // 失去焦点或按回车时保存昵称
+  async onNicknameBlur() {
+    await this.saveNickname()
+  },
+
+  async onNicknameConfirm() {
+    await this.saveNickname()
+  },
+
+  async saveNickname() {
+    const nickname = (this.data.nicknameInput || '').trim()
+    if (!nickname) return
+    const current = this.data.user.nickname || ''
+    if (nickname === current) return
+
+    try {
+      await request.auth({ action: 'updateProfile', nickname })
+      await authUtil.refresh()
+      const updatedUser = getApp().globalData.userInfo || {}
+      this.setData({ user: updatedUser })
+      toast.showSuccess('昵称已保存')
+    } catch (err) {
+      toast.showError(err.message || '保存失败')
+    }
   },
 
   goRecycle() {

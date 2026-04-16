@@ -106,20 +106,16 @@ async function createUploadTicket(openid, event) {
   const originalKey = cosKey(coupleId, photoId, filename, takenAt)
   const thumbnailKey = thumbKey(coupleId, photoId, takenAt)
 
-  const cos = getCOS()
-  const uploadUrl = await getUploadUrl(cos, originalKey)
-
+  // 直接返回云存储路径，前端用 wx.cloud.uploadFile 上传，不需要 COS 预签名
   return resp(OK, 'ok', {
     photoId,
     cosKey: originalKey,
-    thumbnailKey,
-    uploadUrl,
-    headers: { 'Content-Type': mimeType }
+    thumbnailKey
   })
 }
 
 async function confirmUpload(openid, event) {
-  const { photoId, cosKey: key, thumbnailKey, originalName, size, mimeType, width, height, takenAt } = event
+  const { photoId, cosKey: key, thumbnailKey, originalName, size, mimeType, width, height, takenAt, fileID } = event
   if (!photoId || !key) return resp(UNKNOWN, '缺少参数')
 
   const { user, coupleId } = await getUserWithCouple(openid)
@@ -129,11 +125,6 @@ async function confirmUpload(openid, event) {
   const existing = await photosCol.where({ _id: photoId }).get().catch(() => ({ data: [] }))
   if (existing.data.length > 0) return resp(PHOTO_ALREADY_CONFIRMED, '照片已存在')
 
-  // 校验对象是否存在
-  const cos = getCOS()
-  const exists = await cosObjectExists(cos, key)
-  if (!exists) return resp(PHOTO_COS_NOT_FOUND, '文件尚未上传到 COS')
-
   const now = Date.now()
   await photosCol.add({
     data: {
@@ -142,6 +133,7 @@ async function confirmUpload(openid, event) {
       uploadedBy: openid,
       cosKey: key,
       thumbnailKey,
+      fileID: fileID || '',   // 微信云存储 fileID
       originalName: originalName || '',
       size: size || 0,
       mimeType: mimeType || 'image/jpeg',
@@ -186,6 +178,7 @@ async function listPhotos(openid, event) {
     .limit(pageSize)
     .get()
 
+  // 用微信云存储 fileID 直接返回，前端 image src 可直接使用
   return resp(OK, 'ok', { list: data, total: total.total, page, pageSize })
 }
 
@@ -200,12 +193,10 @@ async function getPhotoDetail(openid, event) {
   if (!data.length) return resp(PHOTO_NOT_FOUND, '照片不存在')
 
   const photo = data[0]
-  const cos = getCOS()
 
-  const [thumbUrl, originalUrl] = await Promise.all([
-    signUrl(cos, photo.thumbnailKey).catch(() => ''),
-    signUrl(cos, photo.cosKey).catch(() => '')
-  ])
+  // 使用微信云存储 fileID 直接作为 src，不需要 COS 签名 URL
+  const thumbUrl = photo.fileID || ''
+  const originalUrl = photo.fileID || ''
 
   return resp(OK, 'ok', { photo, thumbUrl, originalUrl })
 }
