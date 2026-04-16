@@ -1,0 +1,61 @@
+/* pages/gallery/recycle.wxss */
+.hint-bar {
+  background: #fff8f0;
+  color: #f90;
+  font-size: 24rpx;
+  padding: 16rpx 24rpx;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6rpx;
+}
+
+.photo-item {
+  position: relative;
+  aspect-ratio: 1;
+}
+
+.photo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 4rpx;
+  background: #f0f0f0;
+  filter: grayscale(30%);
+}
+
+.photo-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.6));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 6rpx 8rpx;
+  border-radius: 0 0 4rpx 4rpx;
+}
+
+.photo-del-time {
+  color: rgba(255,255,255,0.7);
+  font-size: 18rpx;
+}
+
+.restore-btn {
+  color: #fff;
+  font-size: 22rpx;
+  background: rgba(255, 126, 179, 0.8);
+  padding: 4rpx 12rpx;
+  border-radius: 16rpx;
+}
+
+.load-more {
+  text-align: center;
+  padding: 32rpx;
+  color: #bbb;
+  font-size: 26rpx;
+}

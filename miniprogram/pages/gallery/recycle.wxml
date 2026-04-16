@@ -1,0 +1,39 @@
+<!-- pages/gallery/recycle.wxml -->
+<view class="container">
+
+  <view class="hint-bar">照片在回收站中可随时恢复，不会物理删除原图</view>
+
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <view class="empty-wrap" wx:elif="{{!list.length}}">
+    <view class="empty-icon">🗑️</view>
+    <view class="empty-text">回收站是空的</view>
+  </view>
+
+  <view class="photo-grid" wx:else>
+    <view
+      class="photo-item"
+      wx:for="{{list}}"
+      wx:key="_id"
+    >
+      <image
+        class="photo-img"
+        src="{{item.thumbUrl || '/assets/photo-placeholder.png'}}"
+        mode="aspectFill"
+        lazy-load
+      />
+      <view class="photo-overlay">
+        <text class="photo-del-time">{{item.deletedLabel}}</text>
+        <text class="restore-btn" bindtap="onRestore" data-id="{{item._id}}">恢复</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">
+    <text wx:if="{{loadingMore}}">加载中...</text>
+    <text wx:else>加载更多</text>
+  </view>
+
+</view>

@@ -1,0 +1,209 @@
+/* app.wxss - 全局样式 */
+page {
+  background-color: #fff5f8;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-size: 28rpx;
+  color: #333;
+  box-sizing: border-box;
+}
+
+/* 通用容器 */
+.container {
+  padding: 24rpx;
+  min-height: 100vh;
+}
+
+/* 卡片样式 */
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 16rpx rgba(255, 126, 179, 0.08);
+}
+
+/* 主按钮 */
+.btn-primary {
+  background: linear-gradient(135deg, #ff7eb3, #ff4785);
+  color: #fff;
+  border: none;
+  border-radius: 48rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+/* 次要按钮 */
+.btn-secondary {
+  background: #fff;
+  color: #ff7eb3;
+  border: 2rpx solid #ff7eb3;
+  border-radius: 48rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+}
+
+.btn-secondary::after {
+  border: none;
+}
+
+/* 幽灵按钮 */
+.btn-ghost {
+  background: transparent;
+  color: #999;
+  border: 2rpx solid #ddd;
+  border-radius: 48rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  text-align: center;
+}
+
+.btn-ghost::after {
+  border: none;
+}
+
+/* 加载态 */
+.loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.loading-text {
+  color: #bbb;
+  font-size: 28rpx;
+  margin-top: 24rpx;
+}
+
+/* 空态 */
+.empty-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  font-size: 96rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  color: #bbb;
+  font-size: 28rpx;
+  text-align: center;
+}
+
+.empty-sub {
+  color: #ccc;
+  font-size: 24rpx;
+  margin-top: 12rpx;
+  text-align: center;
+}
+
+/* 错误态 */
+.error-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.error-text {
+  color: #f56;
+  font-size: 28rpx;
+  margin-bottom: 24rpx;
+  text-align: center;
+}
+
+/* section 标题 */
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.section-more {
+  font-size: 24rpx;
+  color: #ff7eb3;
+}
+
+/* 分割线 */
+.divider {
+  height: 1rpx;
+  background: #f0f0f0;
+  margin: 24rpx 0;
+}
+
+/* 输入框 */
+.input-wrap {
+  background: #f7f7f7;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.input-label {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}
+
+.input-field {
+  width: 100%;
+  font-size: 30rpx;
+  color: #333;
+}
+
+/* 标签 */
+.tag {
+  display: inline-block;
+  background: #fff0f5;
+  color: #ff7eb3;
+  font-size: 22rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+/* 头像 */
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #ffd6e7;
+}
+
+/* 页面头部 */
+.page-header {
+  padding: 40rpx 24rpx 20rpx;
+  background: #fff;
+}
+
+.page-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.page-subtitle {
+  font-size: 26rpx;
+  color: #999;
+  margin-top: 8rpx;
+}

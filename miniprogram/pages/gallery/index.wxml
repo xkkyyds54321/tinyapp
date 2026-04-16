@@ -1,0 +1,68 @@
+<!-- pages/gallery/index.wxml -->
+<view class="container">
+
+  <!-- 顶部操作栏 -->
+  <view class="toolbar">
+    <!-- 月份筛选 -->
+    <picker mode="date" fields="month" value="{{filterMonth}}" bindchange="onMonthChange">
+      <view class="filter-btn">
+        <text>{{filterMonth || '全部'}}</text>
+        <text class="filter-arrow">▾</text>
+      </view>
+    </picker>
+    <view class="toolbar-right">
+      <view class="recycle-btn" bindtap="goRecycle">🗑️ 回收站</view>
+      <button class="upload-btn" bindtap="onUpload" loading="{{uploading}}">+ 上传</button>
+    </view>
+  </view>
+
+  <!-- 上传进度 -->
+  <view class="progress-bar" wx:if="{{uploading}}">
+    <view class="progress-fill" style="width:{{uploadProgress}}%"></view>
+    <view class="progress-text">上传中 {{uploadProgress}}%</view>
+  </view>
+
+  <!-- 加载态 -->
+  <view class="loading-wrap" wx:if="{{loading && !list.length}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 错误态 -->
+  <view class="error-wrap" wx:elif="{{error}}">
+    <view class="error-text">{{error}}</view>
+    <button class="btn-secondary" bindtap="reload" style="width:240rpx">重试</button>
+  </view>
+
+  <!-- 空态 -->
+  <view class="empty-wrap" wx:elif="{{!list.length && !loading}}">
+    <view class="empty-icon">📸</view>
+    <view class="empty-text">还没有照片</view>
+    <view class="empty-sub">点击右上角 + 上传第一张</view>
+  </view>
+
+  <!-- 照片网格 -->
+  <view class="photo-grid" wx:else>
+    <view
+      class="photo-item"
+      wx:for="{{list}}"
+      wx:key="_id"
+      bindtap="onPhotoTap"
+      data-id="{{item._id}}"
+    >
+      <image
+        class="photo-img"
+        src="{{item.thumbUrl || '/assets/photo-placeholder.png'}}"
+        mode="aspectFill"
+        lazy-load
+      />
+      <view class="photo-time">{{item.timeLabel}}</view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">
+    <text wx:if="{{loadingMore}}">加载中...</text>
+    <text wx:else>加载更多</text>
+  </view>
+
+</view>

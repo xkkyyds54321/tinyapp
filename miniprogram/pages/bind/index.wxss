@@ -1,0 +1,70 @@
+/* pages/bind/index.wxss */
+.bind-header {
+  text-align: center;
+  padding: 80rpx 0 60rpx;
+}
+
+.bind-heart {
+  font-size: 100rpx;
+  margin-bottom: 20rpx;
+}
+
+.bind-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.bind-subtitle {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.card-desc {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 28rpx;
+  line-height: 1.6;
+}
+
+.code-card {
+  text-align: center;
+}
+
+.code-box {
+  font-size: 60rpx;
+  font-weight: 800;
+  color: #ff7eb3;
+  letter-spacing: 12rpx;
+  background: #fff0f5;
+  padding: 28rpx 40rpx;
+  border-radius: 16rpx;
+  margin: 20rpx 0;
+}
+
+.code-hint {
+  font-size: 24rpx;
+  color: #bbb;
+  margin-bottom: 20rpx;
+}
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+  margin: 0 0 24rpx;
+}
+
+.or-text {
+  padding: 0 20rpx;
+  color: #ccc;
+  font-size: 26rpx;
+  flex-shrink: 0;
+}
+
+.divider {
+  flex: 1;
+  height: 1rpx;
+  background: #eee;
+}

@@ -1,0 +1,60 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/bind/index",
+    "pages/gallery/index",
+    "pages/gallery/detail",
+    "pages/gallery/recycle",
+    "pages/anniversaries/index",
+    "pages/messages/index",
+    "pages/profile/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ff7eb3",
+    "navigationBarTitleText": "我们的空间",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#fff5f8"
+  },
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#ff7eb3",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/gallery/index",
+        "text": "相册",
+        "iconPath": "assets/icons/gallery.png",
+        "selectedIconPath": "assets/icons/gallery-active.png"
+      },
+      {
+        "pagePath": "pages/anniversaries/index",
+        "text": "纪念日",
+        "iconPath": "assets/icons/anniversary.png",
+        "selectedIconPath": "assets/icons/anniversary-active.png"
+      },
+      {
+        "pagePath": "pages/messages/index",
+        "text": "留言",
+        "iconPath": "assets/icons/message.png",
+        "selectedIconPath": "assets/icons/message-active.png"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png"
+      }
+    ]
+  },
+  "cloud": true,
+  "sitemapLocation": "sitemap.json",
+  "style": "v2"
+}

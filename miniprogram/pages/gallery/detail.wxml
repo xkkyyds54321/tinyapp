@@ -1,0 +1,44 @@
+<!-- pages/gallery/detail.wxml -->
+<view class="detail-container" wx:if="{{!loading}}">
+
+  <!-- 错误态 -->
+  <view class="error-wrap" wx:if="{{error}}">
+    <view class="error-text">{{error}}</view>
+  </view>
+
+  <block wx:else>
+    <!-- 原图 -->
+    <image
+      class="detail-img"
+      src="{{originalUrl || thumbUrl || '/assets/photo-placeholder.png'}}"
+      mode="aspectFit"
+      bindtap="onPreview"
+    />
+
+    <!-- 信息 -->
+    <view class="detail-info card">
+      <view class="info-row">
+        <text class="info-label">上传者</text>
+        <text class="info-value">{{uploadedBySelf ? '我' : 'TA'}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">时间</text>
+        <text class="info-value">{{timeText}}</text>
+      </view>
+      <view class="info-row" wx:if="{{photo.size}}">
+        <text class="info-label">大小</text>
+        <text class="info-value">{{sizeText}}</text>
+      </view>
+    </view>
+
+    <!-- 操作 -->
+    <view class="detail-actions">
+      <button class="btn-ghost danger-btn" bindtap="onDelete">移入回收站</button>
+    </view>
+  </block>
+
+</view>
+
+<view class="loading-wrap" wx:else>
+  <view class="loading-text">加载中...</view>
+</view>

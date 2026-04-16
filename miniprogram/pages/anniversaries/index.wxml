@@ -1,0 +1,81 @@
+<!-- pages/anniversaries/index.wxml -->
+<view class="container">
+
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <view class="empty-wrap" wx:elif="{{!list.length && !loading}}">
+    <view class="empty-icon">🗓️</view>
+    <view class="empty-text">还没有纪念日</view>
+    <view class="empty-sub">记录每一个重要时刻</view>
+  </view>
+
+  <view wx:else>
+    <view class="anniv-card" wx:for="{{list}}" wx:key="_id">
+      <view class="anniv-main">
+        <view class="anniv-title">{{item.title}}</view>
+        <view class="anniv-date">{{item.date}}</view>
+        <view class="anniv-remark" wx:if="{{item.remark}}">{{item.remark}}</view>
+      </view>
+      <view class="anniv-right">
+        <view class="anniv-days-label {{item.days >= 0 ? 'past' : 'future'}}">{{item.label}}</view>
+        <view class="anniv-actions">
+          <text class="action-btn edit" bindtap="onEdit" data-item="{{item}}">编辑</text>
+          <text class="action-btn delete" bindtap="onDelete" data-id="{{item._id}}">删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 新建按钮 -->
+  <view class="fab" bindtap="onAdd">+</view>
+
+  <!-- 新建/编辑弹窗 -->
+  <view class="modal-mask" wx:if="{{showModal}}" bindtap="onModalClose">
+    <view class="modal-box" catchtap="">
+      <view class="modal-title">{{editId ? '编辑纪念日' : '新建纪念日'}}</view>
+
+      <view class="input-wrap">
+        <view class="input-label">标题 <text class="required">*</text></view>
+        <input
+          class="input-field"
+          placeholder="最长 30 字"
+          value="{{form.title}}"
+          bindinput="onFormTitle"
+          maxlength="30"
+        />
+      </view>
+
+      <view class="input-wrap">
+        <view class="input-label">日期 <text class="required">*</text></view>
+        <picker mode="date" value="{{form.date}}" bindchange="onFormDate">
+          <view class="date-picker">
+            <text>{{form.date || '选择日期'}}</text>
+            <text class="picker-arrow">▾</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="input-wrap">
+        <view class="input-label">备注</view>
+        <textarea
+          class="input-field"
+          placeholder="最长 200 字"
+          value="{{form.remark}}"
+          bindinput="onFormRemark"
+          maxlength="200"
+          auto-height
+        />
+      </view>
+
+      <view class="modal-actions">
+        <button class="btn-ghost" bindtap="onModalClose">取消</button>
+        <button class="btn-primary" bindtap="onSubmit" loading="{{submitting}}" style="flex:1;margin-left:16rpx">
+          {{editId ? '保存' : '创建'}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+</view>

@@ -1,0 +1,99 @@
+<!-- pages/home/index.wxml -->
+<view class="container">
+
+  <!-- 加载态 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 错误态 -->
+  <view class="error-wrap" wx:elif="{{error}}">
+    <view class="error-text">{{error}}</view>
+    <button class="btn-secondary" bindtap="onLoad" style="width:240rpx">重试</button>
+  </view>
+
+  <!-- 正常内容 -->
+  <block wx:else>
+
+    <!-- 情侣信息头部 -->
+    <view class="couple-header">
+      <view class="couple-user">
+        <image class="avatar" src="{{user.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
+        <view class="couple-name">{{user.nickname || '我'}}</view>
+      </view>
+      <view class="couple-center">
+        <view class="heart-icon">💕</view>
+        <view wx:if="{{couple.boundAt}}" class="together-days">在一起 {{togetherDays}} 天</view>
+      </view>
+      <view class="couple-user">
+        <image class="avatar" src="{{partner.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
+        <view class="couple-name">{{partner.nickname || 'TA'}}</view>
+      </view>
+    </view>
+
+    <!-- 最近照片 -->
+    <view class="card">
+      <view class="section-row">
+        <view class="section-title">最近照片</view>
+        <view class="section-more" bindtap="goGallery">查看全部 ›</view>
+      </view>
+
+      <view class="empty-wrap" wx:if="{{!photos.length}}">
+        <view class="empty-icon">📷</view>
+        <view class="empty-text">还没有照片，去上传第一张吧</view>
+      </view>
+
+      <view class="photo-grid" wx:else>
+        <image
+          wx:for="{{photos}}"
+          wx:key="_id"
+          class="photo-thumb"
+          src="{{item.thumbUrl || '/assets/photo-placeholder.png'}}"
+          mode="aspectFill"
+          bindtap="goGallery"
+        />
+      </view>
+    </view>
+
+    <!-- 最近纪念日 -->
+    <view class="card">
+      <view class="section-row">
+        <view class="section-title">纪念日</view>
+        <view class="section-more" bindtap="goAnniversaries">查看全部 ›</view>
+      </view>
+
+      <view class="empty-wrap" wx:if="{{!anniversaries.length}}">
+        <view class="empty-icon">🗓️</view>
+        <view class="empty-text">还没有纪念日，去添加吧</view>
+      </view>
+
+      <view wx:else>
+        <view class="anniv-item" wx:for="{{anniversaries}}" wx:key="_id">
+          <view class="anniv-title">{{item.title}}</view>
+          <view class="anniv-days {{item.days >= 0 ? 'past' : 'future'}}">{{item.label}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 最近留言 -->
+    <view class="card">
+      <view class="section-row">
+        <view class="section-title">留言</view>
+        <view class="section-more" bindtap="goMessages">查看全部 ›</view>
+      </view>
+
+      <view class="empty-wrap" wx:if="{{!messages.length}}">
+        <view class="empty-icon">💌</view>
+        <view class="empty-text">还没有留言，和 TA 说点什么</view>
+      </view>
+
+      <view wx:else>
+        <view class="msg-item" wx:for="{{messages}}" wx:key="_id">
+          <view class="msg-content">{{item.content}}</view>
+          <view class="msg-time">{{item.timeLabel}}</view>
+        </view>
+      </view>
+    </view>
+
+  </block>
+</view>

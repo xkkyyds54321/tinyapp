@@ -1,0 +1,57 @@
+<!-- pages/bind/index.wxml -->
+<view class="container">
+  <!-- 未绑定状态 -->
+  <view class="bind-header">
+    <view class="bind-heart">💕</view>
+    <view class="bind-title">情侣空间</view>
+    <view class="bind-subtitle">和 TA 一起记录每一天</view>
+  </view>
+
+  <!-- 创建情侣空间 -->
+  <view class="card">
+    <view class="section-title">创建属于你们的空间</view>
+    <view class="card-desc">创建后会生成一个 6 位绑定码，分享给 TA 即可完成绑定</view>
+    <button class="btn-primary" bindtap="onCreateCouple" loading="{{creating}}">
+      创建情侣空间
+    </button>
+  </view>
+
+  <!-- 绑定码展示 -->
+  <view class="card code-card" wx:if="{{myCode}}">
+    <view class="section-title">等待 TA 加入</view>
+    <view class="code-box">{{myCode}}</view>
+    <view class="code-hint">将此绑定码分享给你的 TA，7 天内有效</view>
+    <button class="btn-ghost" bindtap="onCopyCode">复制绑定码</button>
+  </view>
+
+  <!-- 已有绑定码时的分隔 -->
+  <view class="or-divider">
+    <view class="divider"></view>
+    <view class="or-text">或</view>
+    <view class="divider"></view>
+  </view>
+
+  <!-- 输入绑定码加入 -->
+  <view class="card">
+    <view class="section-title">输入 TA 的绑定码</view>
+    <view class="input-wrap">
+      <input
+        class="input-field code-input"
+        placeholder="输入 6 位绑定码"
+        value="{{inputCode}}"
+        bindinput="onInputCode"
+        maxlength="6"
+        style="text-align:center;letter-spacing:8rpx;font-size:40rpx;font-weight:600;"
+      />
+    </view>
+    <button
+      class="btn-secondary"
+      bindtap="onJoinCouple"
+      loading="{{joining}}"
+      disabled="{{inputCode.length !== 6}}"
+    >
+      加入情侣空间
+    </button>
+  </view>
+
+</view>

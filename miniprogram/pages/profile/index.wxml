@@ -1,0 +1,62 @@
+<!-- pages/profile/index.wxml -->
+<view class="container">
+
+  <!-- 用户信息 -->
+  <view class="card user-card">
+    <image class="profile-avatar" src="{{user.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
+    <view class="profile-info">
+      <view class="profile-name">{{user.nickname || '我'}}</view>
+      <view class="profile-sub">{{couple && couple.status === 'active' ? '已绑定情侣空间' : '未绑定'}}</view>
+    </view>
+  </view>
+
+  <!-- 情侣信息 -->
+  <view class="card" wx:if="{{couple && couple.status === 'active'}}">
+    <view class="section-title">情侣空间</view>
+    <view class="couple-info-row">
+      <text class="ci-label">状态</text>
+      <text class="ci-value bound">已绑定 💕</text>
+    </view>
+    <view class="couple-info-row">
+      <text class="ci-label">绑定时间</text>
+      <text class="ci-value">{{boundAtText}}</text>
+    </view>
+    <view class="couple-info-row">
+      <text class="ci-label">在一起</text>
+      <text class="ci-value">{{togetherDays}} 天</text>
+    </view>
+  </view>
+
+  <!-- 功能入口 -->
+  <view class="card">
+    <view class="section-title">功能</view>
+
+    <view class="menu-item" bindtap="goRecycle">
+      <text class="menu-icon">🗑️</text>
+      <text class="menu-label">照片回收站</text>
+      <text class="menu-arrow">›</text>
+    </view>
+
+    <view class="menu-item" bindtap="onExport">
+      <text class="menu-icon">📦</text>
+      <text class="menu-label">导出我的数据</text>
+      <text class="menu-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 存储占用 -->
+  <view class="card" wx:if="{{storageInfo}}">
+    <view class="section-title">存储概览</view>
+    <view class="storage-row">
+      <text class="st-label">照片总数</text>
+      <text class="st-value">{{storageInfo.total}} 张</text>
+    </view>
+    <view class="storage-row">
+      <text class="st-label">回收站</text>
+      <text class="st-value">{{storageInfo.deleted}} 张</text>
+    </view>
+  </view>
+
+  <view class="version-hint">情侣空间 v1.0.0</view>
+
+</view>

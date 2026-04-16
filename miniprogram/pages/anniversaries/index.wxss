@@ -1,0 +1,143 @@
+/* pages/anniversaries/index.wxss */
+.anniv-card {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 12rpx rgba(255,126,179,0.07);
+}
+
+.anniv-main {
+  flex: 1;
+}
+
+.anniv-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.anniv-date {
+  font-size: 24rpx;
+  color: #aaa;
+  margin-bottom: 8rpx;
+}
+
+.anniv-remark {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.anniv-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  min-width: 160rpx;
+}
+
+.anniv-days-label {
+  font-size: 24rpx;
+  font-weight: 500;
+  text-align: right;
+}
+
+.anniv-days-label.past {
+  color: #ff7eb3;
+}
+
+.anniv-days-label.future {
+  color: #6cb0ff;
+}
+
+.anniv-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.action-btn {
+  font-size: 24rpx;
+}
+
+.action-btn.edit {
+  color: #ff7eb3;
+}
+
+.action-btn.delete {
+  color: #f56;
+}
+
+/* FAB */
+.fab {
+  position: fixed;
+  bottom: 120rpx;
+  right: 40rpx;
+  width: 96rpx;
+  height: 96rpx;
+  background: linear-gradient(135deg, #ff7eb3, #ff4785);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 24rpx rgba(255,71,133,0.4);
+  line-height: 96rpx;
+  text-align: center;
+}
+
+/* 弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: flex-end;
+  z-index: 999;
+}
+
+.modal-box {
+  width: 100%;
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 40rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 32rpx;
+}
+
+.required {
+  color: #f56;
+}
+
+.date-picker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.picker-arrow {
+  color: #aaa;
+}
+
+.modal-actions {
+  display: flex;
+  margin-top: 32rpx;
+  gap: 16rpx;
+}
+
+.modal-actions .btn-ghost {
+  width: 180rpx;
+}

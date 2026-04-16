@@ -1,0 +1,29 @@
+{
+  "desc": "关于本项目中各个文件和目录的用途",
+  "pages": [
+    {
+      "value": "pages/home",
+      "desc": "首页 - 情侣空间摘要"
+    },
+    {
+      "value": "pages/bind",
+      "desc": "绑定页 - 创建/加入情侣空间"
+    },
+    {
+      "value": "pages/gallery",
+      "desc": "相册页 - 照片列表/详情/回收站"
+    },
+    {
+      "value": "pages/anniversaries",
+      "desc": "纪念日页"
+    },
+    {
+      "value": "pages/messages",
+      "desc": "留言页"
+    },
+    {
+      "value": "pages/profile",
+      "desc": "个人中心"
+    }
+  ]
+}
