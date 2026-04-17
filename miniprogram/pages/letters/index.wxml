@@ -1,0 +1,89 @@
+<!-- pages/letters/index.wxml -->
+<view class="container">
+
+  <view class="loading-wrap" wx:if="{{loading && !list.length}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <view class="empty-wrap" wx:elif="{{!list.length}}">
+    <view class="empty-icon">💌</view>
+    <view class="empty-text">还没有情书</view>
+    <view class="empty-sub">写一封给未来的 TA</view>
+  </view>
+
+  <scroll-view class="letter-list" scroll-y wx:else>
+    <view
+      class="letter-card {{item.isUnlocked ? 'unlocked' : 'locked'}}"
+      wx:for="{{list}}"
+      wx:key="_id"
+      bindtap="onTapLetter"
+      data-item="{{item}}"
+    >
+      <view class="letter-lock-icon">{{item.isUnlocked ? '💌' : '🔒'}}</view>
+      <view class="letter-info">
+        <view class="letter-title">{{item.title}}</view>
+        <view class="letter-meta" wx:if="{{item.isUnlocked}}">
+          <text class="letter-date">{{item.unlockDateText}} 解锁</text>
+        </view>
+        <view class="letter-meta" wx:else>
+          <text class="letter-days">还有 {{item.daysLeft}} 天解锁</text>
+        </view>
+        <view class="letter-created">写于 {{item.createdDateText}}</view>
+      </view>
+      <text
+        wx:if="{{item.authorOpenid === myOpenid}}"
+        class="delete-btn"
+        catchtap="onDelete"
+        data-id="{{item._id}}"
+      >删除</text>
+    </view>
+  </scroll-view>
+
+  <!-- 写信 FAB -->
+  <view class="fab" bindtap="onAdd">✏️</view>
+
+  <!-- 写信弹窗 -->
+  <view class="modal-mask" wx:if="{{showModal}}" bindtap="onModalClose">
+    <view class="modal-box" catchtap="noop">
+      <view class="modal-title">写一封情书</view>
+
+      <view class="input-wrap">
+        <view class="input-label">标题 <text class="required">*</text></view>
+        <input class="input-field" placeholder="最长 30 字" value="{{form.title}}" bindinput="onFormTitle" maxlength="30" focus="true" />
+      </view>
+
+      <view class="input-wrap">
+        <view class="input-label">内容 <text class="required">*</text></view>
+        <textarea class="input-field textarea-field" placeholder="写下你想说的话（最长 2000 字）" value="{{form.content}}" bindinput="onFormContent" maxlength="2000" auto-height />
+      </view>
+
+      <view class="input-wrap">
+        <view class="input-label">解锁日期 <text class="required">*</text></view>
+        <picker mode="date" value="{{form.unlockDate}}" bindchange="onFormDate">
+          <view class="date-picker">
+            <text class="{{form.unlockDate ? '' : 'picker-placeholder'}}">{{form.unlockDate || '选择解锁日期'}}</text>
+            <text class="picker-arrow">▾</text>
+          </view>
+        </picker>
+      </view>
+
+      <view class="modal-actions">
+        <button class="btn-ghost" bindtap="onModalClose">取消</button>
+        <button class="btn-primary" bindtap="onSubmit" loading="{{submitting}}" style="flex:1;margin-left:16rpx">封存</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 阅读弹窗 -->
+  <view class="modal-mask" wx:if="{{showDetail}}" bindtap="onDetailClose">
+    <view class="detail-box" catchtap="noop">
+      <view class="detail-title">{{detailLetter.title}}</view>
+      <view class="detail-meta">写于 {{detailLetter.createdDateText}} · {{detailLetter.unlockDateText}} 解锁</view>
+      <scroll-view class="detail-content-wrap" scroll-y>
+        <view class="detail-content">{{detailLetter.content}}</view>
+      </scroll-view>
+      <button class="btn-ghost" style="margin-top:32rpx" bindtap="onDetailClose">关闭</button>
+    </view>
+  </view>
+
+</view>

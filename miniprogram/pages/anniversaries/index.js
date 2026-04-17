@@ -103,6 +103,8 @@ Page({
     }
   },
 
+  noop() {},
+
   async onDelete(e) {
     const id = e.currentTarget.dataset.id
     const confirmed = await toast.showModal({

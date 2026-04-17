@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "情侣轨迹",
+  "navigationBarBackgroundColor": "#ff7eb3",
+  "navigationBarTextStyle": "white",
+  "requiredPrivateInfos": ["getLocation", "startLocationUpdateBackground"],
+  "usingComponents": {}
+}

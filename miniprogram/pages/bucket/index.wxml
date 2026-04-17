@@ -1,0 +1,93 @@
+<!--pages/bucket/index.wxml-->
+<view class="container">
+
+  <!-- Progress bar -->
+  <view class="progress-wrap">
+    <view class="progress-text">已完成 <text class="progress-count">{{doneCount}}</text> / 100</view>
+    <view class="progress-bar-bg">
+      <view class="progress-bar-fill" style="width: {{doneCount}}%"></view>
+    </view>
+  </view>
+
+  <!-- Grid -->
+  <view class="grid" wx:if="{{!loading}}">
+    <view
+      class="grid-item {{doneMap[index] ? 'done' : 'todo'}}"
+      wx:for="{{list}}"
+      wx:key="index"
+      bindtap="onTapItem"
+      data-index="{{index}}"
+    >
+      <image
+        wx:if="{{doneMap[index] && doneMap[index].photoUrl}}"
+        class="grid-photo"
+        src="{{doneMap[index].photoUrl}}"
+        mode="aspectFill"
+      />
+      <view class="grid-overlay" wx:if="{{doneMap[index]}}">
+        <view class="done-icon">✓</view>
+      </view>
+      <view class="grid-text" wx:if="{{!doneMap[index]}}">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- Detail / Complete panel -->
+  <view class="modal-mask" wx:if="{{showPanel}}" bindtap="onPanelClose">
+    <view class="panel-box" catchtap="noop">
+      <view class="panel-title">{{panelItem.title}}</view>
+
+      <!-- Done state: view details -->
+      <block wx:if="{{panelItem.isDone}}">
+        <image
+          wx:if="{{panelItem.photoUrl}}"
+          class="panel-photo"
+          src="{{panelItem.photoUrl}}"
+          mode="aspectFill"
+        />
+        <view class="panel-meta" wx:if="{{panelItem.doneDate}}">📅 {{panelItem.doneDate}}</view>
+        <view class="panel-meta" wx:if="{{panelItem.location}}">📍 {{panelItem.location}}</view>
+        <view class="panel-desc" wx:if="{{panelItem.description}}">{{panelItem.description}}</view>
+        <button class="btn-delete" bindtap="onDeleteItem">删除记录</button>
+        <button class="btn-ghost" style="margin-top:16rpx" bindtap="onPanelClose">关闭</button>
+      </block>
+
+      <!-- Todo state: complete form -->
+      <block wx:else>
+        <view class="photo-picker" bindtap="onChoosePhoto">
+          <image wx:if="{{form.photoPath}}" class="photo-preview" src="{{form.photoPath}}" mode="aspectFill" />
+          <view wx:else class="photo-placeholder">
+            <view class="photo-icon">📷</view>
+            <view class="photo-hint">点击上传照片（必填）</view>
+          </view>
+        </view>
+
+        <view class="input-wrap">
+          <input class="input-field" placeholder="描述一下这次经历（选填）" value="{{form.description}}" bindinput="onFormDesc" maxlength="100" />
+        </view>
+
+        <view class="input-wrap">
+          <picker mode="date" value="{{form.doneDate}}" bindchange="onFormDate">
+            <view class="date-picker">
+              <text class="{{form.doneDate ? '' : 'picker-placeholder'}}">{{form.doneDate || '完成日期（选填）'}}</text>
+              <text class="picker-arrow">▾</text>
+            </view>
+          </picker>
+        </view>
+
+        <view class="input-wrap">
+          <input class="input-field" placeholder="地点（选填）" value="{{form.location}}" bindinput="onFormLocation" maxlength="50" />
+        </view>
+
+        <view class="modal-actions">
+          <button class="btn-ghost" bindtap="onPanelClose">取消</button>
+          <button class="btn-primary" bindtap="onComplete" loading="{{uploading}}" style="flex:1;margin-left:16rpx">打卡完成</button>
+        </view>
+      </block>
+    </view>
+  </view>
+
+</view>

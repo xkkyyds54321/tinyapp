@@ -1,0 +1,100 @@
+<!--pages/quiz/index.wxml-->
+<view class="container">
+
+  <!-- Tab bar -->
+  <view class="tab-bar">
+    <view class="tab-item {{tab === 'today' ? 'active' : ''}}" bindtap="onTabSwitch" data-tab="today">今日问答</view>
+    <view class="tab-item {{tab === 'history' ? 'active' : ''}}" bindtap="onTabSwitch" data-tab="history">历史记录</view>
+  </view>
+
+  <!-- Today tab -->
+  <view wx:if="{{tab === 'today'}}">
+    <view class="loading-wrap" wx:if="{{loading}}">
+      <view class="loading-text">加载中...</view>
+    </view>
+
+    <block wx:elif="{{today}}">
+      <!-- Question card -->
+      <view class="question-card">
+        <view class="question-label">今日问题</view>
+        <view class="question-text">{{today.question.content}}</view>
+      </view>
+
+      <!-- State 1: not answered -->
+      <view class="answer-section" wx:if="{{!today.myAnswer}}">
+        <view class="answer-hint">写下你的答案，等 TA 也回答后才能互相看到哦 💕</view>
+        <textarea
+          class="answer-input"
+          placeholder="写下你的答案..."
+          value="{{answerInput}}"
+          bindinput="onAnswerInput"
+          maxlength="200"
+          auto-height
+        />
+        <view class="char-count">{{answerInput.length}}/200</view>
+        <button class="btn-submit" bindtap="onSubmit" loading="{{submitting}}">提交答案</button>
+      </view>
+
+      <!-- State 2: answered, waiting partner -->
+      <view class="waiting-section" wx:elif="{{today.waitingPartner}}">
+        <view class="my-answer-box">
+          <view class="answer-box-label">我的答案</view>
+          <view class="answer-box-text">{{today.myAnswer}}</view>
+        </view>
+        <view class="waiting-tip">
+          <view class="waiting-icon">⏳</view>
+          <view class="waiting-text">等待 TA 的回答...</view>
+          <view class="waiting-sub">TA 回答后你们就能互相看到啦</view>
+        </view>
+      </view>
+
+      <!-- State 3: both answered -->
+      <view class="reveal-section" wx:elif="{{today.bothAnswered}}">
+        <view class="reveal-tip">🎉 你们都回答了！</view>
+        <view class="answer-pair">
+          <view class="answer-box mine">
+            <view class="answer-box-label">我的答案</view>
+            <view class="answer-box-text">{{today.myAnswer}}</view>
+          </view>
+          <view class="answer-box partner">
+            <view class="answer-box-label">TA 的答案</view>
+            <view class="answer-box-text">{{today.partnerAnswer}}</view>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- History tab -->
+  <view wx:if="{{tab === 'history'}}">
+    <view class="loading-wrap" wx:if="{{historyLoading && !historyList.length}}">
+      <view class="loading-text">加载中...</view>
+    </view>
+
+    <view class="empty-wrap" wx:elif="{{!historyList.length}}">
+      <view class="empty-icon">💬</view>
+      <view class="empty-text">还没有历史记录</view>
+      <view class="empty-sub">双方都回答后才会出现在这里</view>
+    </view>
+
+    <view class="history-list" wx:else>
+      <view class="history-item" wx:for="{{historyList}}" wx:key="dateKey">
+        <view class="history-date">{{item.dateKey}}</view>
+        <view class="history-question">{{item.questionContent}}</view>
+        <view class="history-answers">
+          <view class="answer-box mine">
+            <view class="answer-box-label">我</view>
+            <view class="answer-box-text">{{item.myAnswer}}</view>
+          </view>
+          <view class="answer-box partner">
+            <view class="answer-box-label">TA</view>
+            <view class="answer-box-text">{{item.partnerAnswer}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="load-more" wx:if="{{historyLoading}}">加载中...</view>
+      <view class="no-more" wx:elif="{{historyList.length >= historyTotal && historyTotal > 0}}">没有更多了</view>
+    </view>
+  </view>
+
+</view>

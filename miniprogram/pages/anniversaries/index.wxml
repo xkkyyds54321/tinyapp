@@ -33,7 +33,7 @@
 
   <!-- 新建/编辑弹窗：wx:if 保证每次打开都是全新 DOM -->
   <view class="modal-mask" wx:if="{{showModal}}" bindtap="onModalClose">
-    <view class="modal-box" catchtap="">
+    <view class="modal-box" catchtap="noop">
       <view class="modal-title">{{editId ? '编辑纪念日' : '新建纪念日'}}</view>
 
       <view class="input-wrap">

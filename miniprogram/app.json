@@ -8,7 +8,11 @@
     "pages/anniversaries/index",
     "pages/messages/index",
     "pages/profile/index",
-    "pages/couple-detail/index"
+    "pages/couple-detail/index",
+    "pages/track/index",
+    "pages/quiz/index",
+    "pages/bucket/index",
+    "pages/letters/index"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -17,6 +21,15 @@
     "navigationBarTextStyle": "white",
     "backgroundColor": "#fff5f8"
   },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于显示你和 TA 的位置"
+    },
+    "scope.userLocationBackground": {
+      "desc": "用于后台持续记录轨迹"
+    }
+  },
+  "requiredBackgroundModes": ["location"],
   "tabBar": {
     "color": "#999",
     "selectedColor": "#ff7eb3",

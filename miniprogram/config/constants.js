@@ -20,6 +20,16 @@ module.exports = {
   // 情侣空间 pending 超时天数
   COUPLE_PENDING_EXPIRE_DAYS: 7,
 
+  // 问答回答最大字数
+  QUIZ_ANSWER_MAX: 200,
+
+  // 情书
+  LETTER_CONTENT_MAX: 2000,
+  LETTER_TITLE_MAX: 30,
+
+  // 100件小事完成描述最大字数
+  BUCKET_DESC_MAX: 100,
+
   // 云函数名称
   CLOUD_FUNCTIONS: {
     AUTH: 'auth',
@@ -28,6 +38,10 @@ module.exports = {
     ANNIVERSARIES: 'anniversaries',
     MESSAGES: 'messages',
     EXPORT: 'export',
-    BACKUP: 'backup'
+    BACKUP: 'backup',
+    TRACK: 'track',
+    QUIZ: 'quiz',
+    BUCKET: 'bucket',
+    LETTERS: 'letters'
   }
 }

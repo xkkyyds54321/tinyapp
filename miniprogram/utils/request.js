@@ -43,5 +43,9 @@ const photos = (data) => callFunction(CLOUD_FUNCTIONS.PHOTOS, data)
 const anniversaries = (data) => callFunction(CLOUD_FUNCTIONS.ANNIVERSARIES, data)
 const messages = (data) => callFunction(CLOUD_FUNCTIONS.MESSAGES, data)
 const exportFn = (data) => callFunction(CLOUD_FUNCTIONS.EXPORT, data)
+const track = (data) => callFunction(CLOUD_FUNCTIONS.TRACK, data)
+const quiz = (data) => callFunction(CLOUD_FUNCTIONS.QUIZ, data)
+const bucket = (data) => callFunction(CLOUD_FUNCTIONS.BUCKET, data)
+const letters = (data) => callFunction(CLOUD_FUNCTIONS.LETTERS, data)
 
-module.exports = { callFunction, auth, couple, photos, anniversaries, messages, exportFn }
+module.exports = { callFunction, auth, couple, photos, anniversaries, messages, exportFn, track, quiz, bucket, letters }

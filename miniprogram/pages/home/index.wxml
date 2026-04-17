@@ -24,7 +24,7 @@
       <button class="btn-secondary" bindtap="loadData" style="width:240rpx">重试</button>
     </view>
 
-    <!-- 情侣信息头部：无背景框，两条弧线穿过在一起天数连接双方头像 -->
+    <!-- 情侣信息头部 -->
     <view wx:else class="couple-header">
       <view class="couple-user">
         <image class="avatar" src="{{user.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
@@ -33,15 +33,12 @@
       </view>
 
       <view class="couple-center" bindtap="goDetail">
-        <!-- 上弧线 -->
         <view class="arc-top" />
-        <!-- 中间文字 -->
         <view class="center-text-wrap">
           <view class="heart-icon">💕</view>
           <view wx:if="{{couple.boundAt}}" class="together-days">在一起 {{togetherDays}} 天 ›</view>
           <view wx:else class="together-days together-days-tap">设置日期 ›</view>
         </view>
-        <!-- 下弧线 -->
         <view class="arc-bottom" />
       </view>
 
@@ -53,47 +50,24 @@
     </view>
   </view>
 
-  <!-- 底部卡片区（固定在屏幕底部） -->
-  <view class="cards-bottom" wx:if="{{!loading && !error}}">
-
-    <!-- 纪念日（紧凑） -->
-    <view class="card">
-      <view class="section-row">
-        <view class="section-title">纪念日</view>
-        <view class="section-more" bindtap="goAnniversaries">更多 ›</view>
-      </view>
-
-      <view class="empty-wrap" wx:if="{{!anniversaries.length}}">
-        <view class="empty-text">还没有纪念日，去添加吧</view>
-      </view>
-
-      <view wx:else>
-        <view class="anniv-item" wx:for="{{anniversaries}}" wx:key="_id">
-          <view class="anniv-title">{{item.title}}</view>
-          <view class="anniv-days {{item.days >= 0 ? 'past' : 'future'}}">{{item.label}}</view>
-        </view>
-      </view>
+  <!-- 底部功能网格（2×2） -->
+  <view class="feature-grid" wx:if="{{!loading && !error}}">
+    <view class="feature-item" bindtap="goTrack">
+      <text class="feature-icon">📍</text>
+      <text class="feature-label">情侣轨迹</text>
     </view>
-
-    <!-- 留言（紧凑） -->
-    <view class="card">
-      <view class="section-row">
-        <view class="section-title">留言</view>
-        <view class="section-more" bindtap="goMessages">更多 ›</view>
-      </view>
-
-      <view class="empty-wrap" wx:if="{{!messages.length}}">
-        <view class="empty-text">还没有留言，和 TA 说点什么</view>
-      </view>
-
-      <view wx:else>
-        <view class="msg-item" wx:for="{{messages}}" wx:key="_id">
-          <view class="msg-content">{{item.content}}</view>
-          <view class="msg-time">{{item.timeLabel}}</view>
-        </view>
-      </view>
+    <view class="feature-item" bindtap="goQuiz">
+      <text class="feature-icon">💬</text>
+      <text class="feature-label">甜蜜问答</text>
     </view>
-
+    <view class="feature-item" bindtap="goBucket">
+      <text class="feature-icon">✅</text>
+      <text class="feature-label">100件小事</text>
+    </view>
+    <view class="feature-item" bindtap="goLetters">
+      <text class="feature-icon">💌</text>
+      <text class="feature-label">未来情书</text>
+    </view>
   </view>
 
 </view>

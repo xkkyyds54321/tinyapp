@@ -69,6 +69,22 @@ async function listMessages(openid, event) {
     })
   }
 
+  // 将 cloud fileID 转为临时 URL，解决跨用户头像权限问题
+  const fileIDs = [...new Set(
+    Object.values(userMap).map(u => u.avatarUrl).filter(url => url && url.startsWith('cloud://'))
+  )]
+  if (fileIDs.length) {
+    try {
+      const { fileList } = await cloud.getTempFileURL({ fileList: fileIDs })
+      const urlMap = {}
+      fileList.forEach(({ fileID, tempFileURL }) => { urlMap[fileID] = tempFileURL })
+      Object.keys(userMap).forEach(uid => {
+        const fid = userMap[uid].avatarUrl
+        if (urlMap[fid]) userMap[uid].avatarUrl = urlMap[fid]
+      })
+    } catch (e) {}
+  }
+
   const list = data.map((m) => ({
     ...m,
     senderAvatar: (userMap[m.senderOpenid] || {}).avatarUrl || '',

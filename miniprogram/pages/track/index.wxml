@@ -1,0 +1,52 @@
+<!--pages/track/index.wxml-->
+<view class="container">
+
+  <!-- Tab bar -->
+  <view class="tab-bar">
+    <view class="tab-item {{tab === 'realtime' ? 'active' : ''}}" bindtap="onTabSwitch" data-tab="realtime">实时位置</view>
+    <view class="tab-item {{tab === 'track' ? 'active' : ''}}" bindtap="onTabSwitch" data-tab="track">今日轨迹</view>
+  </view>
+
+  <!-- Map -->
+  <map
+    class="map"
+    latitude="{{mapCenter.latitude}}"
+    longitude="{{mapCenter.longitude}}"
+    scale="{{scale}}"
+    markers="{{markers}}"
+    polyline="{{polyline}}"
+    show-location
+  />
+
+  <!-- Realtime info overlay -->
+  <view class="info-overlay" wx:if="{{tab === 'realtime'}}">
+    <view class="info-row" wx:if="{{partnerLocation}}">
+      <view class="info-dot partner"></view>
+      <view class="info-text">TA 的位置 · {{partnerUpdatedText}}更新</view>
+    </view>
+    <view class="info-row" wx:elif="{{locationGranted}}">
+      <view class="info-dot waiting"></view>
+      <view class="info-text">等待 TA 的位置...</view>
+    </view>
+    <view class="info-row" wx:else>
+      <view class="info-dot error"></view>
+      <view class="info-text">需要位置权限</view>
+    </view>
+  </view>
+
+  <!-- Track info overlay -->
+  <view class="info-overlay" wx:if="{{tab === 'track'}}">
+    <view class="info-row" wx:if="{{loading}}">
+      <view class="info-text">加载轨迹中...</view>
+    </view>
+    <view class="info-row" wx:elif="{{trackPoints.length}}">
+      <view class="info-dot partner"></view>
+      <view class="info-text">TA 今日轨迹 · {{trackPoints.length}} 个位置点</view>
+    </view>
+    <view class="info-row" wx:else>
+      <view class="info-dot waiting"></view>
+      <view class="info-text">TA 今天还没有轨迹</view>
+    </view>
+  </view>
+
+</view>
