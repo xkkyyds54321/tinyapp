@@ -13,7 +13,8 @@ Page({
     pageSize: 20,
     hasMore: true,
     inputText: '',
-    sending: false
+    sending: false,
+    myOpenid: ''
   },
 
   async onShow() {
@@ -22,6 +23,9 @@ Page({
       wx.navigateTo({ url: '/pages/bind/index' })
       return
     }
+    const app = getApp()
+    const myOpenid = (app.globalData.userInfo || {}).openid || ''
+    this.setData({ myOpenid })
     await this.reload()
   },
 
@@ -34,14 +38,12 @@ Page({
     if (this.data.loading) return
     this.setData({ loading: true })
     try {
-      const { page, pageSize } = this.data
+      const { page, pageSize, myOpenid } = this.data
       const res = await msgService.listMessages({ page, pageSize })
-      const app = getApp()
-      const openid = app.globalData.userInfo ? app.globalData.userInfo.openid : ''
       const newList = (res.list || []).map((m) => ({
         ...m,
-        isMine: m.senderOpenid === openid,
-        timeLabel: dateUtil.relativeTime(m.createdAt)
+        isMine: m.senderOpenid === myOpenid,
+        timeLabel: dateUtil.formatTimestamp(m.createdAt, 'MM-DD HH:mm')
       }))
       this.setData({
         list: page === 1 ? newList : [...this.data.list, ...newList],

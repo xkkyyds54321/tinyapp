@@ -1,26 +1,43 @@
 <!-- pages/profile/index.wxml -->
 <view class="container">
 
-  <!-- 用户信息（头像可点击换微信头像，昵称可编辑） -->
+  <!-- 用户信息（点击头像换微信头像，右侧昵称可编辑） -->
   <view class="card user-card">
-    <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-      <image class="profile-avatar" src="{{user.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
-      <view class="avatar-edit-hint">换头像</view>
-    </button>
-    <view class="profile-info">
-      <view class="nickname-row">
-        <input
-          class="nickname-input"
-          value="{{nicknameInput}}"
-          placeholder="点击修改昵称"
-          maxlength="12"
-          bindinput="onNicknameInput"
-          bindblur="onNicknameBlur"
-          confirm-type="done"
-          bindconfirm="onNicknameConfirm"
-        />
+    <!-- 我 -->
+    <view class="user-block">
+      <view class="avatar-wrap">
+        <image class="profile-avatar" src="{{user.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar" />
       </view>
-      <view class="profile-sub">{{couple && couple.status === 'active' ? '已绑定情侣空间' : '未绑定'}}</view>
+      <input
+        class="nickname-input"
+        type="nickname"
+        value="{{nicknameInput}}"
+        placeholder="设置昵称"
+        maxlength="12"
+        bindinput="onNicknameInput"
+        bindchange="onNicknameChange"
+        bindblur="onNicknameBlur"
+        confirm-type="done"
+        bindconfirm="onNicknameConfirm"
+      />
+    </view>
+
+    <!-- 连线 + 爱心（双弧线） -->
+    <view class="user-connector" wx:if="{{partner && partner.openid}}">
+      <view class="conn-arc-top" />
+      <view class="conn-center">
+        <text class="connector-heart">💕</text>
+      </view>
+      <view class="conn-arc-bottom" />
+    </view>
+
+    <!-- TA -->
+    <view class="user-block" wx:if="{{partner && partner.openid}}" bindtap="onViewPartner">
+      <view class="avatar-wrap partner-avatar-wrap">
+        <image class="profile-avatar" src="{{partner.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
+      </view>
+      <view class="partner-nickname">{{partner.nickname || 'TA'}}</view>
     </view>
   </view>
 
@@ -72,5 +89,27 @@
   </view>
 
   <view class="version-hint">情侣空间 v1.0.0</view>
+
+  <!-- 情侣信息弹窗 -->
+  <view class="modal-mask" wx:if="{{showPartnerModal}}" bindtap="onClosePartnerModal">
+    <view class="modal-box" catchtap="">
+      <view class="modal-title">TA 的信息</view>
+      <view class="partner-modal-body">
+        <view class="partner-modal-avatar-wrap">
+          <image class="partner-modal-avatar" src="{{partner.avatarUrl || '/assets/default-avatar.png'}}" mode="aspectFill" />
+        </view>
+        <view class="partner-modal-name">{{partner.nickname || 'TA'}}</view>
+        <view class="partner-modal-row" wx:if="{{couple && couple.boundAt}}">
+          <text class="partner-modal-label">在一起</text>
+          <text class="partner-modal-value">{{togetherDays}} 天</text>
+        </view>
+        <view class="partner-modal-row" wx:if="{{boundAtText}}">
+          <text class="partner-modal-label">从</text>
+          <text class="partner-modal-value">{{boundAtText}}</text>
+        </view>
+      </view>
+      <button class="partner-modal-close-btn" bindtap="onClosePartnerModal">关闭</button>
+    </view>
+  </view>
 
 </view>

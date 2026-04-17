@@ -70,7 +70,14 @@
   color: #f56;
 }
 
-/* FAB */
+.picker-placeholder {
+  color: #aaa;
+}
+
+.textarea-field {
+  min-height: 64rpx;
+}
+
 .fab {
   position: fixed;
   bottom: 120rpx;

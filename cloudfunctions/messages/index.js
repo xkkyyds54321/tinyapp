@@ -59,7 +59,23 @@ async function listMessages(openid, event) {
     .limit(pageSize)
     .get()
 
-  return resp(OK, 'ok', { list: data, total: total.total, page, pageSize })
+  // 批量查询发送者头像和昵称
+  const openids = [...new Set(data.map((m) => m.senderOpenid).filter(Boolean))]
+  let userMap = {}
+  if (openids.length) {
+    const { data: userList } = await users.where({ openid: db.command.in(openids) }).get()
+    userList.forEach((u) => {
+      userMap[u.openid] = { avatarUrl: u.avatarUrl || '', nickname: u.nickname || '' }
+    })
+  }
+
+  const list = data.map((m) => ({
+    ...m,
+    senderAvatar: (userMap[m.senderOpenid] || {}).avatarUrl || '',
+    senderNickname: (userMap[m.senderOpenid] || {}).nickname || ''
+  }))
+
+  return resp(OK, 'ok', { list, total: total.total, page, pageSize })
 }
 
 async function deleteMessage(openid, event) {

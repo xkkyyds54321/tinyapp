@@ -2,205 +2,287 @@
 .user-card {
   display: flex;
   align-items: center;
-  gap: 28rpx;
+  gap: 0;
 }
 
-/* 头像按钮 */
-.avatar-btn {
+/* 我 / TA 各自的竖排块，固定宽度 */
+.user-block {
+  width: 140rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+}
+
+/* 中间连接区：仿首页双弧线风格 */
+.user-connector {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100rpx;
   position: relative;
-  width: 120rpx;
-  height: 120rpx;
+}
+
+/* 上弧线 */
+.conn-arc-top {
+  width: 100%;
+  flex: 1;
+  border-top: 3rpx solid #ff7eb3;
+  border-left: 3rpx solid transparent;
+  border-right: 3rpx solid transparent;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  box-sizing: border-box;
+}
+
+/* 下弧线 */
+.conn-arc-bottom {
+  width: 100%;
+  flex: 1;
+  border-bottom: 3rpx solid #ff7eb3;
+  border-left: 3rpx solid transparent;
+  border-right: 3rpx solid transparent;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  box-sizing: border-box;
+}
+
+.conn-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rpx 0;
+}
+
+.connector-heart {
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+/* 头像外层保持正圆 */
+.avatar-wrap {
+  position: relative;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 50%;
+  border: 4rpx solid #ffb6d1;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.partner-avatar-wrap {
+  border-color: #a8d8ff;
+}
+
+/* 头像图片填满容器 */
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 透明按钮覆盖在图片上，只负责触发授权 */
+.avatar-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   padding: 0;
   margin: 0;
   background: transparent;
   border: none;
-  flex-shrink: 0;
-  line-height: 1;
+  opacity: 0;
 }
 
 .avatar-btn::after {
   border: none;
 }
 
-.profile-avatar {
-  width: 120rpx;
-  height: 120rpx;
+.nickname-input {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  width: 100%;
+}
+
+.partner-nickname {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  max-width: 140rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.profile-id {
+  font-size: 22rpx;
+  color: #bbb;
+  margin-bottom: 6rpx;
+  word-break: break-all;
+}
+
+.profile-sub {
+  font-size: 24rpx;
+  color: #aaa;
+}
+
+.couple-info-row, .storage-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.couple-info-row:last-child, .storage-row:last-child {
+  border-bottom: none;
+}
+
+.ci-label, .st-label {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.ci-value, .st-value {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.ci-value.bound {
+  color: #ff7eb3;
+}
+
+/* 菜单 */
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-icon {
+  font-size: 36rpx;
+  margin-right: 16rpx;
+}
+
+.menu-label {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.menu-arrow {
+  color: #ccc;
+  font-size: 32rpx;
+}
+
+.version-hint {
+  text-align: center;
+  color: #ccc;
+  font-size: 22rpx;
+  padding: 40rpx 0 20rpx;
+}
+
+/* 情侣信息弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: flex-end;
+  z-index: 999;
+}
+
+.modal-box {
+  width: 100%;
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 40rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+}
+
+.modal-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 32rpx;
+  text-align: center;
+}
+
+.partner-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 0 32rpx;
+}
+
+.partner-modal-avatar-wrap {
+  width: 140rpx;
+  height: 140rpx;
   border-radius: 50%;
+  border: 4rpx solid #a8d8ff;
+  overflow: hidden;
+  box-sizing: border-box;
+  margin-bottom: 20rpx;
+}
+
+.partner-modal-avatar {
+  width: 100%;
+  height: 100%;
   display: block;
 }
 
-.avatar-edit-hint {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0,0,0,0.4);
-  color: #fff;
-  font-size: 18rpx;
-  text-align: center;
-  padding: 4rpx 0;
-  border-radius: 0 0 60rpx 60rpx;
-}
-
-.profile-info {
-  flex: 1;
-}
-
-.nickname-row {
-  margin-bottom: 8rpx;
-}
-
-.nickname-input {
-  font-size: 34rpx;
-  font-weight: 600;
+.partner-modal-name {
+  font-size: 36rpx;
+  font-weight: 700;
   color: #333;
+  margin-bottom: 28rpx;
+}
+
+.partner-modal-row {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 12rpx;
+}
+
+.partner-modal-label {
+  font-size: 28rpx;
+  color: #aaa;
+}
+
+.partner-modal-value {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.partner-modal-close-btn {
   width: 100%;
-  border-bottom: 2rpx solid #ffe0ef;
-  padding-bottom: 4rpx;
-}
-
-.profile-name {
-  font-size: 36rpx;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 8rpx;
-}
-
-.profile-sub {
-  font-size: 24rpx;
-  color: #aaa;
-}
-
-.couple-info-row, .storage-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 16rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
-}
-
-.couple-info-row:last-child, .storage-row:last-child {
-  border-bottom: none;
-}
-
-.ci-label, .st-label {
+  margin-top: 8rpx;
+  background: #f5f5f5;
+  color: #666;
+  border: none;
+  border-radius: 48rpx;
+  height: 80rpx;
+  line-height: 80rpx;
   font-size: 28rpx;
-  color: #999;
-}
-
-.ci-value, .st-value {
-  font-size: 28rpx;
-  color: #333;
-}
-
-.ci-value.bound {
-  color: #ff7eb3;
-}
-
-/* 菜单 */
-.menu-item {
-  display: flex;
-  align-items: center;
-  padding: 24rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
-}
-
-.menu-item:last-child {
-  border-bottom: none;
-}
-
-.menu-icon {
-  font-size: 36rpx;
-  margin-right: 16rpx;
-}
-
-.menu-label {
-  flex: 1;
-  font-size: 30rpx;
-  color: #333;
-}
-
-.menu-arrow {
-  color: #ccc;
-  font-size: 32rpx;
-}
-
-.version-hint {
   text-align: center;
-  color: #ccc;
-  font-size: 22rpx;
-  padding: 40rpx 0 20rpx;
 }
 
-
-.profile-name {
-  font-size: 36rpx;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 8rpx;
-}
-
-.profile-sub {
-  font-size: 24rpx;
-  color: #aaa;
-}
-
-.couple-info-row, .storage-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 16rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
-}
-
-.couple-info-row:last-child, .storage-row:last-child {
-  border-bottom: none;
-}
-
-.ci-label, .st-label {
-  font-size: 28rpx;
-  color: #999;
-}
-
-.ci-value, .st-value {
-  font-size: 28rpx;
-  color: #333;
-}
-
-.ci-value.bound {
-  color: #ff7eb3;
-}
-
-/* 菜单 */
-.menu-item {
-  display: flex;
-  align-items: center;
-  padding: 24rpx 0;
-  border-bottom: 1rpx solid #f5f5f5;
-}
-
-.menu-item:last-child {
-  border-bottom: none;
-}
-
-.menu-icon {
-  font-size: 36rpx;
-  margin-right: 16rpx;
-}
-
-.menu-label {
-  flex: 1;
-  font-size: 30rpx;
-  color: #333;
-}
-
-.menu-arrow {
-  color: #ccc;
-  font-size: 32rpx;
-}
-
-.version-hint {
-  text-align: center;
-  color: #ccc;
-  font-size: 22rpx;
-  padding: 40rpx 0 20rpx;
+.partner-modal-close-btn::after {
+  border: none;
 }

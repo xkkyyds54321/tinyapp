@@ -9,11 +9,13 @@ const toast = require('../../utils/toast')
 Page({
   data: {
     user: {},
+    partner: null,
     couple: null,
     togetherDays: 0,
     boundAtText: '',
     storageInfo: null,
-    nicknameInput: ''
+    nicknameInput: '',
+    showPartnerModal: false
   },
 
   async onShow() {
@@ -24,6 +26,7 @@ Page({
     }
     const app = getApp()
     const user = app.globalData.userInfo || {}
+    const partner = app.globalData.partnerInfo || null
     const couple = app.globalData.couple || null
 
     let togetherDays = 0
@@ -33,7 +36,7 @@ Page({
       boundAtText = dateUtil.formatTimestamp(couple.boundAt, 'YYYY-MM-DD')
     }
 
-    this.setData({ user, couple, togetherDays, boundAtText, nicknameInput: user.nickname || '' })
+    this.setData({ user, partner, couple, togetherDays, boundAtText, nicknameInput: user.nickname || '' })
     this.loadStorageInfo()
   },
 
@@ -54,7 +57,7 @@ Page({
 
   // 微信头像授权回调
   async onChooseAvatar(e) {
-    const { avatarUrl } = e.detail
+    const { avatarUrl, nickName } = e.detail
     if (!avatarUrl) return
 
     toast.showLoading('保存中...')
@@ -74,13 +77,19 @@ Page({
         })
       })
 
+      // 如果用户还没有昵称，用微信返回的昵称；微信昵称也没有则用 openid 后6位
+      const existingNickname = (user.nickname || '').trim()
+      const wxNickname = (nickName || '').trim()
+      const defaultNickname = openid.slice(-6)
+      const finalNickname = existingNickname || wxNickname || defaultNickname
+
       // 保存到用户记录
-      await request.auth({ action: 'updateProfile', avatarUrl: uploadRes.fileID })
+      await request.auth({ action: 'updateProfile', avatarUrl: uploadRes.fileID, nickname: finalNickname })
 
       // 刷新全局状态
       await authUtil.refresh()
       const updatedUser = getApp().globalData.userInfo || {}
-      this.setData({ user: updatedUser })
+      this.setData({ user: updatedUser, nicknameInput: updatedUser.nickname || '' })
 
       wx.hideLoading()
       toast.showSuccess('头像已更新')
@@ -92,6 +101,13 @@ Page({
 
   onNicknameInput(e) {
     this.setData({ nicknameInput: e.detail.value })
+  },
+
+  // type="nickname" 选择微信昵称时触发 bindchange（与手动输入后触发的 bindinput 区别）
+  onNicknameChange(e) {
+    // 微信昵称选择后 detail.value 已包含昵称，直接触发保存
+    this.setData({ nicknameInput: e.detail.value })
+    this.saveNickname()
   },
 
   // 失去焦点或按回车时保存昵称
@@ -122,6 +138,14 @@ Page({
 
   goRecycle() {
     wx.navigateTo({ url: '/pages/gallery/recycle' })
+  },
+
+  onViewPartner() {
+    this.setData({ showPartnerModal: true })
+  },
+
+  onClosePartnerModal() {
+    this.setData({ showPartnerModal: false })
   },
 
   async onExport() {

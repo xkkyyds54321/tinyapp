@@ -31,19 +31,22 @@
   <!-- 新建按钮 -->
   <view class="fab" bindtap="onAdd">+</view>
 
-  <!-- 新建/编辑弹窗 -->
+  <!-- 新建/编辑弹窗：wx:if 保证每次打开都是全新 DOM -->
   <view class="modal-mask" wx:if="{{showModal}}" bindtap="onModalClose">
     <view class="modal-box" catchtap="">
       <view class="modal-title">{{editId ? '编辑纪念日' : '新建纪念日'}}</view>
 
       <view class="input-wrap">
         <view class="input-label">标题 <text class="required">*</text></view>
+        <!-- value 绑定 + controlled 写法，避免 setData 后内容丢失 -->
         <input
           class="input-field"
           placeholder="最长 30 字"
           value="{{form.title}}"
           bindinput="onFormTitle"
           maxlength="30"
+          focus="{{!editId}}"
+          confirm-type="next"
         />
       </view>
 
@@ -51,7 +54,7 @@
         <view class="input-label">日期 <text class="required">*</text></view>
         <picker mode="date" value="{{form.date}}" bindchange="onFormDate">
           <view class="date-picker">
-            <text>{{form.date || '选择日期'}}</text>
+            <text class="{{form.date ? '' : 'picker-placeholder'}}">{{form.date || '选择日期'}}</text>
             <text class="picker-arrow">▾</text>
           </view>
         </picker>
@@ -60,8 +63,8 @@
       <view class="input-wrap">
         <view class="input-label">备注</view>
         <textarea
-          class="input-field"
-          placeholder="最长 200 字"
+          class="input-field textarea-field"
+          placeholder="最长 200 字（选填）"
           value="{{form.remark}}"
           bindinput="onFormRemark"
           maxlength="200"

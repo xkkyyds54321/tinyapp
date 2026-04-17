@@ -1,7 +1,6 @@
 // pages/home/index.js
 const authUtil = require('../../utils/auth')
 const dateUtil = require('../../utils/date')
-const photoService = require('../../services/photos')
 const annivService = require('../../services/anniversaries')
 const msgService = require('../../services/messages')
 const coupleService = require('../../services/couple')
@@ -15,10 +14,17 @@ Page({
     partner: {},
     couple: null,
     togetherDays: 0,
-    photos: [],
     anniversaries: [],
     messages: [],
-    changingCover: false
+    changingCover: false,
+    statusBarHeight: 20   // 状态栏高度（px），onLoad 动态读取
+  },
+
+  onLoad() {
+    try {
+      const info = wx.getSystemInfoSync()
+      this.setData({ statusBarHeight: info.statusBarHeight || 20 })
+    } catch (e) {}
   },
 
   async onShow() {
@@ -53,8 +59,7 @@ Page({
       }
 
       // 并行拉取数据
-      const [photosRes, annivRes, msgRes] = await Promise.all([
-        photoService.listPhotos({ page: 1, pageSize: 6 }),
+      const [annivRes, msgRes] = await Promise.all([
         annivService.listAnniversaries(),
         msgService.listMessages({ page: 1, pageSize: 3 })
       ])
@@ -77,7 +82,6 @@ Page({
         partner,
         couple,
         togetherDays,
-        photos: photosRes.list || [],
         anniversaries,
         messages
       })

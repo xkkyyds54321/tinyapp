@@ -12,22 +12,47 @@
   </view>
 
   <scroll-view class="msg-list" scroll-y wx:else>
-    <view
-      class="msg-bubble {{item.isMine ? 'mine' : 'theirs'}}"
-      wx:for="{{list}}"
-      wx:key="_id"
-    >
-      <view class="bubble-content">{{item.content}}</view>
-      <view class="bubble-meta">
-        <text class="bubble-time">{{item.timeLabel}}</text>
-        <text class="delete-btn" wx:if="{{item.isMine}}" bindtap="onDelete" data-id="{{item._id}}"> 删除</text>
-      </view>
-    </view>
 
     <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">
       <text wx:if="{{loadingMore}}">加载中...</text>
-      <text wx:else>加载更多</text>
+      <text wx:else>查看更多</text>
     </view>
+
+    <view
+      class="msg-row {{item.isMine ? 'mine' : 'theirs'}}"
+      wx:for="{{list}}"
+      wx:key="_id"
+    >
+      <!-- 对方：头像在左 -->
+      <image
+        wx:if="{{!item.isMine}}"
+        class="msg-avatar"
+        src="{{item.senderAvatar || '/assets/default-avatar.png'}}"
+        mode="aspectFill"
+      />
+
+      <view class="msg-body">
+        <!-- 昵称 + 时间 -->
+        <view class="msg-meta {{item.isMine ? 'meta-right' : 'meta-left'}}">
+          <text class="msg-name">{{item.senderNickname || (item.isMine ? '我' : 'TA')}}</text>
+          <text class="msg-time">{{item.timeLabel}}</text>
+        </view>
+        <!-- 气泡 -->
+        <view class="bubble-wrap {{item.isMine ? 'bubble-right' : 'bubble-left'}}">
+          <view class="bubble-content {{item.isMine ? 'mine' : 'theirs'}}">{{item.content}}</view>
+          <text class="delete-btn" wx:if="{{item.isMine}}" bindtap="onDelete" data-id="{{item._id}}">删除</text>
+        </view>
+      </view>
+
+      <!-- 自己：头像在右 -->
+      <image
+        wx:if="{{item.isMine}}"
+        class="msg-avatar"
+        src="{{item.senderAvatar || '/assets/default-avatar.png'}}"
+        mode="aspectFill"
+      />
+    </view>
+
   </scroll-view>
 
   <!-- 输入框 -->
@@ -44,7 +69,7 @@
     <button
       class="send-btn"
       bindtap="onSend"
-      disabled="{{!inputText.trim()}}"
+      disabled="{{!inputText || sending}}"
       loading="{{sending}}"
     >发送</button>
   </view>

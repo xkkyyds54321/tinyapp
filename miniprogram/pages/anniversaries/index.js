@@ -39,16 +39,26 @@ Page({
     }
   },
 
+  // 新建：先关掉弹窗（清空 DOM），下一帧再带空数据打开
   onAdd() {
-    this.setData({ showModal: true, editId: '', form: { title: '', date: '', remark: '' } })
+    const d = new Date()
+    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+    this.setData({ showModal: false, editId: '', form: { title: '', date: today, remark: '' } })
+    wx.nextTick(() => {
+      this.setData({ showModal: true })
+    })
   },
 
+  // 编辑：同理，先清后填
   onEdit(e) {
     const item = e.currentTarget.dataset.item
     this.setData({
-      showModal: true,
+      showModal: false,
       editId: item._id,
       form: { title: item.title, date: item.date, remark: item.remark || '' }
+    })
+    wx.nextTick(() => {
+      this.setData({ showModal: true })
     })
   },
 
@@ -69,24 +79,25 @@ Page({
   },
 
   async onSubmit() {
-    const { form, editId } = this.data
-    if (!form.title.trim()) return toast.showError('请填写标题')
+    const { form, editId, submitting } = this.data
+    const title = (form.title || '').trim()
+    if (!title) return toast.showError('请填写标题')
     if (!form.date) return toast.showError('请选择日期')
-    if (this.data.submitting) return
+    if (submitting) return
 
     this.setData({ submitting: true })
     try {
       if (editId) {
-        await annivService.updateAnniversary(editId, form)
+        await annivService.updateAnniversary(editId, { title, date: form.date, remark: form.remark || '' })
         toast.showSuccess('已更新')
       } else {
-        await annivService.createAnniversary(form)
+        await annivService.createAnniversary({ title, date: form.date, remark: form.remark || '' })
         toast.showSuccess('已创建')
       }
       this.setData({ showModal: false })
       await this.loadList()
     } catch (err) {
-      toast.showError(err.message)
+      toast.showError(err.message || '操作失败，请重试')
     } finally {
       this.setData({ submitting: false })
     }
