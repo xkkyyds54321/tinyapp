@@ -140,6 +140,16 @@ Page({
     wx.navigateTo({ url: '/pages/gallery/recycle' })
   },
 
+  goBills() {
+    wx.navigateTo({ url: '/pages/bills/index' })
+  },
+
+  goPromises() {
+    wx.navigateTo({ url: '/pages/promises/index' })
+  },
+
+  noop() {},
+
   onViewPartner() {
     this.setData({ showPartnerModal: true })
   },

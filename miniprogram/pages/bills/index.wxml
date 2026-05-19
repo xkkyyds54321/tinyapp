@@ -1,0 +1,136 @@
+<!-- pages/bills/index.wxml -->
+<view class="container">
+
+  <!-- 顶部筛选 + 添加 -->
+  <view class="toolbar">
+    <picker mode="date" fields="month" value="{{filterMonth}}" bindchange="onMonthChange">
+      <view class="filter-btn">
+        <text>{{filterMonth}}</text>
+        <text class="filter-arrow">▾</text>
+      </view>
+    </picker>
+    <button class="add-btn btn-primary" bindtap="onShowAdd">+ 记一笔</button>
+  </view>
+
+  <!-- 月度统计 -->
+  <view class="card stats-card" wx:if="{{stats}}">
+    <view class="stats-total">
+      <text class="stats-label">本月合计</text>
+      <text class="stats-amount">¥ {{stats.total}}</text>
+    </view>
+    <view class="stats-cats">
+      <view
+        class="cat-tag"
+        wx:for="{{categories}}"
+        wx:key="key"
+        wx:if="{{stats.byCategory[item.key]}}"
+      >
+        <text>{{item.emoji}} {{item.label}}</text>
+        <text class="cat-amount">¥{{stats.byCategory[item.key]}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载态 -->
+  <view class="loading-wrap" wx:if="{{loading && !list.length}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 空态 -->
+  <view class="empty-wrap" wx:elif="{{!list.length && !loading}}">
+    <view class="empty-icon">💸</view>
+    <view class="empty-text">本月还没有记录</view>
+    <view class="empty-sub">点击"记一笔"开始记账</view>
+  </view>
+
+  <!-- 账单列表 -->
+  <view class="bill-list" wx:else>
+    <view
+      class="bill-item card"
+      wx:for="{{list}}"
+      wx:key="_id"
+    >
+      <view class="bill-left">
+        <view class="bill-cat">{{item.categoryEmoji}}</view>
+        <view class="bill-info">
+          <view class="bill-note">{{item.note || item.categoryLabel}}</view>
+          <view class="bill-meta">{{item.creatorName}} · {{item.billDate}}</view>
+        </view>
+      </view>
+      <view class="bill-right">
+        <text class="bill-amount">¥ {{item.amount}}</text>
+        <text class="bill-delete" wx:if="{{item.isMine}}" data-id="{{item._id}}" bindtap="onDelete">×</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">
+    <text wx:if="{{loading}}">加载中...</text>
+    <text wx:else>加载更多</text>
+  </view>
+
+</view>
+
+<!-- 添加账单弹窗 -->
+<view class="modal-mask" wx:if="{{showAddModal}}" bindtap="onCloseAdd">
+  <view class="modal-box" catchtap="noop">
+    <view class="modal-title">记一笔</view>
+
+    <!-- 金额 -->
+    <view class="form-item">
+      <text class="form-label">金额</text>
+      <view class="amount-input-wrap">
+        <text class="amount-prefix">¥</text>
+        <input
+          class="amount-input"
+          type="digit"
+          placeholder="0.00"
+          value="{{form.amount}}"
+          bindinput="onAmountInput"
+        />
+      </view>
+    </view>
+
+    <!-- 分类 -->
+    <view class="form-item">
+      <text class="form-label">分类</text>
+      <view class="cat-grid">
+        <view
+          class="cat-btn {{form.category === item.key ? 'cat-btn-active' : ''}}"
+          wx:for="{{categories}}"
+          wx:key="key"
+          data-key="{{item.key}}"
+          bindtap="onSelectCategory"
+        >
+          <text class="cat-btn-emoji">{{item.emoji}}</text>
+          <text class="cat-btn-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 日期 -->
+    <view class="form-item">
+      <text class="form-label">日期</text>
+      <picker mode="date" value="{{form.billDate}}" bindchange="onDateChange">
+        <view class="date-picker-btn">{{form.billDate}} ▾</view>
+      </picker>
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-item">
+      <text class="form-label">备注</text>
+      <input
+        class="note-input"
+        placeholder="可选"
+        value="{{form.note}}"
+        maxlength="50"
+        bindinput="onNoteInput"
+      />
+    </view>
+
+    <view class="modal-btns">
+      <button class="btn-ghost modal-btn-cancel" bindtap="onCloseAdd">取消</button>
+      <button class="btn-primary modal-btn-ok" loading="{{submitting}}" bindtap="onSubmit">保存</button>
+    </view>
+  </view>
+</view>

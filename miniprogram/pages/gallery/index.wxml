@@ -11,6 +11,7 @@
       </view>
     </picker>
     <view class="toolbar-right">
+      <view class="recycle-btn" bindtap="goMap">🗺️ 地图</view>
       <view class="recycle-btn" bindtap="goRecycle">🗑️ 回收站</view>
       <button class="upload-btn" bindtap="onUpload" loading="{{uploading}}">+ 上传</button>
     </view>

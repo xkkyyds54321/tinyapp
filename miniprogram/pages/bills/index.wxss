@@ -1,0 +1,188 @@
+/* pages/bills/index.wxss */
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 32rpx;
+  padding: 12rpx 24rpx;
+  font-size: 26rpx;
+  color: #666;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.06);
+}
+
+.filter-arrow { margin-left: 8rpx; font-size: 20rpx; color: #aaa; }
+
+.add-btn {
+  height: 64rpx;
+  line-height: 64rpx;
+  font-size: 26rpx;
+  padding: 0 28rpx;
+  border-radius: 32rpx;
+  min-width: 0;
+}
+
+/* 统计卡片 */
+.stats-card { margin-bottom: 20rpx; }
+
+.stats-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.stats-label { font-size: 28rpx; color: #999; }
+.stats-amount { font-size: 40rpx; font-weight: 700; color: #ff4d88; }
+
+.stats-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.cat-tag {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: #fff5f8;
+  border-radius: 24rpx;
+  padding: 8rpx 18rpx;
+  font-size: 24rpx;
+  color: #666;
+}
+
+.cat-amount { color: #ff4d88; font-weight: 600; margin-left: 4rpx; }
+
+/* 账单列表 */
+.bill-list { display: flex; flex-direction: column; gap: 12rpx; }
+
+.bill-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 28rpx;
+}
+
+.bill-left { display: flex; align-items: center; gap: 20rpx; flex: 1; min-width: 0; }
+
+.bill-cat { font-size: 40rpx; flex-shrink: 0; }
+
+.bill-info { flex: 1; min-width: 0; }
+
+.bill-note {
+  font-size: 28rpx;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bill-meta { font-size: 22rpx; color: #aaa; margin-top: 4rpx; }
+
+.bill-right { display: flex; align-items: center; gap: 16rpx; flex-shrink: 0; }
+
+.bill-amount { font-size: 32rpx; font-weight: 600; color: #ff4d88; }
+.bill-delete { color: #ddd; font-size: 40rpx; }
+
+.load-more {
+  text-align: center;
+  padding: 32rpx;
+  color: #bbb;
+  font-size: 26rpx;
+}
+
+/* 弹窗 */
+.modal-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+
+.modal-box {
+  width: 100%;
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 40rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 32rpx;
+  text-align: center;
+}
+
+.form-item { margin-bottom: 28rpx; }
+
+.form-label { font-size: 26rpx; color: #999; display: block; margin-bottom: 12rpx; }
+
+.amount-input-wrap {
+  display: flex;
+  align-items: center;
+  border-bottom: 2rpx solid #f0f0f0;
+  padding: 8rpx 0;
+}
+
+.amount-prefix { font-size: 36rpx; color: #ff4d88; font-weight: 600; margin-right: 8rpx; }
+
+.amount-input { flex: 1; font-size: 36rpx; color: #333; font-weight: 600; }
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12rpx;
+}
+
+.cat-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  padding: 16rpx 8rpx;
+  border-radius: 16rpx;
+  border: 2rpx solid #f0f0f0;
+  background: #fafafa;
+}
+
+.cat-btn-active { border-color: #ff7eb3; background: #fff0f5; }
+
+.cat-btn-emoji { font-size: 36rpx; }
+.cat-btn-label { font-size: 22rpx; color: #666; }
+.cat-btn-active .cat-btn-label { color: #ff4d88; }
+
+.date-picker-btn {
+  font-size: 28rpx;
+  color: #333;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+}
+
+.note-input {
+  font-size: 28rpx;
+  color: #333;
+  border-bottom: 2rpx solid #f0f0f0;
+  padding: 8rpx 0;
+  width: 100%;
+}
+
+.modal-btns {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 36rpx;
+}
+
+.modal-btn-cancel, .modal-btn-ok { flex: 1; height: 88rpx; line-height: 88rpx; border-radius: 44rpx; font-size: 30rpx; }

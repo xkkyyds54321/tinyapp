@@ -1,0 +1,151 @@
+/* pages/promises/index.wxss */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28rpx;
+}
+
+.page-title { font-size: 36rpx; font-weight: 700; color: #333; }
+
+.add-btn {
+  height: 64rpx;
+  line-height: 64rpx;
+  font-size: 26rpx;
+  padding: 0 28rpx;
+  border-radius: 32rpx;
+  min-width: 0;
+}
+
+.section-label {
+  font-size: 24rpx;
+  color: #aaa;
+  margin: 24rpx 0 12rpx;
+  padding: 0 4rpx;
+}
+
+.done-label { color: #ccc; }
+
+.promise-list { display: flex; flex-direction: column; gap: 12rpx; }
+
+.promise-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+  padding: 24rpx 28rpx;
+  border-radius: 20rpx;
+}
+
+.promise-done { background: #f9f9f9; }
+
+.promise-check {
+  flex-shrink: 0;
+  padding-top: 4rpx;
+}
+
+.check-circle {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  border: 3rpx solid #ffb6d1;
+}
+
+.done-check .check-circle-done {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff7eb3, #ff4785);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.promise-body { flex: 1; min-width: 0; }
+
+.promise-content {
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.done-content {
+  color: #bbb;
+  text-decoration: line-through;
+}
+
+.promise-meta {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: #aaa;
+  display: flex;
+  gap: 4rpx;
+}
+
+.promise-creator { color: #aaa; }
+.promise-due { color: #ff7eb3; }
+
+.promise-delete {
+  color: #e0e0e0;
+  font-size: 40rpx;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* 弹窗 */
+.modal-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+
+.modal-box {
+  width: 100%;
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 40rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 32rpx;
+  text-align: center;
+}
+
+.form-item { margin-bottom: 28rpx; }
+
+.form-label { font-size: 26rpx; color: #999; display: block; margin-bottom: 12rpx; }
+
+.content-textarea {
+  width: 100%;
+  min-height: 100rpx;
+  font-size: 28rpx;
+  color: #333;
+  border: 1rpx solid #f0f0f0;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  box-sizing: border-box;
+  background: #fafafa;
+}
+
+.date-picker-btn {
+  font-size: 28rpx;
+  color: #333;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+}
+
+.modal-btns { display: flex; gap: 20rpx; margin-top: 36rpx; }
+
+.modal-btn-cancel, .modal-btn-ok { flex: 1; height: 88rpx; line-height: 88rpx; border-radius: 44rpx; font-size: 30rpx; }

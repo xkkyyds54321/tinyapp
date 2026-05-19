@@ -1,0 +1,88 @@
+<!-- pages/mood/index.wxml -->
+<view class="container">
+
+  <!-- 心情输入区 -->
+  <view class="card mood-input-card">
+    <view class="input-title">今天的心情</view>
+
+    <!-- 表情选择 -->
+    <view class="emoji-grid">
+      <view
+        class="emoji-item {{selectedMood === item ? 'emoji-selected' : ''}}"
+        wx:for="{{moodEmojis}}"
+        wx:key="*this"
+        data-emoji="{{item}}"
+        bindtap="onSelectMood"
+      >{{item}}</view>
+    </view>
+
+    <!-- 可选文字 -->
+    <textarea
+      class="content-input"
+      placeholder="写点什么（可选）..."
+      value="{{contentInput}}"
+      maxlength="200"
+      auto-height
+      bindinput="onContentInput"
+    />
+
+    <button
+      class="submit-btn btn-primary"
+      loading="{{submitting}}"
+      disabled="{{!selectedMood || submitting}}"
+      bindtap="onSubmit"
+    >记录心情</button>
+  </view>
+
+  <!-- 历史记录 -->
+  <view class="loading-wrap" wx:if="{{loading && !list.length}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <view class="empty-wrap" wx:elif="{{!list.length && !loading}}">
+    <view class="empty-icon">🌈</view>
+    <view class="empty-text">还没有心情记录</view>
+    <view class="empty-sub">记录你们每天的心情吧</view>
+  </view>
+
+  <view wx:else>
+    <view
+      class="date-group"
+      wx:for="{{list}}"
+      wx:key="dateKey"
+    >
+      <view class="date-label">{{item.dateKey}}</view>
+      <view class="mood-list">
+        <view
+          class="mood-item card"
+          wx:for="{{item.items}}"
+          wx:key="_id"
+          wx:for-item="mood"
+        >
+          <view class="mood-main">
+            <text class="mood-emoji">{{mood.mood}}</text>
+            <view class="mood-body">
+              <view class="mood-meta">
+                <text class="mood-who {{mood.isMine ? 'mood-mine' : 'mood-partner'}}">{{mood.nickname}}</text>
+                <text class="mood-time">{{mood.timeText}}</text>
+              </view>
+              <view class="mood-content" wx:if="{{mood.content}}">{{mood.content}}</view>
+            </view>
+          </view>
+          <text
+            class="mood-delete"
+            wx:if="{{mood.isMine}}"
+            data-id="{{mood._id}}"
+            bindtap="onDelete"
+          >×</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="load-more" wx:if="{{hasMore}}" bindtap="loadMore">
+      <text wx:if="{{loading}}">加载中...</text>
+      <text wx:else>加载更多</text>
+    </view>
+  </view>
+
+</view>

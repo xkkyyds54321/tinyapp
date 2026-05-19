@@ -1,0 +1,44 @@
+<!-- pages/gallery/map.wxml -->
+<view class="map-page">
+
+  <!-- 加载态 -->
+  <view class="loading-wrap" wx:if="{{loading}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 无地点照片空态 -->
+  <view class="empty-wrap" wx:elif="{{!markers.length}}">
+    <view class="empty-icon">🗺️</view>
+    <view class="empty-text">还没有带位置的照片</view>
+    <view class="empty-sub">上传照片时会自动记录位置</view>
+  </view>
+
+  <!-- 地图 -->
+  <block wx:else>
+    <map
+      class="map"
+      latitude="{{latitude}}"
+      longitude="{{longitude}}"
+      scale="{{scale}}"
+      markers="{{markers}}"
+      show-location
+      bindmarkertap="onMarkerTap"
+    />
+
+    <!-- 照片预览浮层 -->
+    <view class="photo-preview" wx:if="{{selectedPhoto}}" bindtap="onClosePreview">
+      <view class="preview-card" catchtap="goDetail">
+        <image class="preview-img" src="{{selectedPhoto.fileID || '/assets/default-avatar.png'}}" mode="aspectFill" />
+        <view class="preview-meta">
+          <text class="preview-time">{{selectedPhoto.timeText}}</text>
+          <text class="preview-hint">点击查看详情 ›</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="marker-count">
+      <text>{{markers.length}} 张有位置的照片</text>
+    </view>
+  </block>
+
+</view>

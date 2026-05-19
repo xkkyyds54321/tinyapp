@@ -32,6 +32,14 @@ function listRecycleBin(params = {}) {
   return request.photos({ action: 'listRecycleBin', ...params })
 }
 
+function updatePhotoNote(photoId, note, tags) {
+  return request.photos({ action: 'updatePhotoNote', photoId, note, tags })
+}
+
+function listPhotosWithLocation() {
+  return request.photos({ action: 'listPhotosWithLocation' })
+}
+
 /**
  * 上传照片：使用微信云存储 wx.cloud.uploadFile
  * 上传后返回 fileID，再传给 confirmUpload 写库
@@ -58,5 +66,7 @@ module.exports = {
   deletePhoto,
   restorePhoto,
   listRecycleBin,
-  uploadToCOS
+  uploadToCOS,
+  updatePhotoNote,
+  listPhotosWithLocation
 }

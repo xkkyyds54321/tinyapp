@@ -89,17 +89,19 @@ Page({
 
       this.setData({ uploading: true, uploadProgress: 0 })
 
-      // 压缩图片（质量 80%，长边限制 1920px）
+      // 位置信息需申请 getLocation 权限后启用，暂不采集
+      const latitude = null
+      const longitude = null
+
       const compressedPath = await new Promise((resolve) => {
         wx.compressImage({
           src: filePath,
           quality: 80,
           success: (r) => resolve(r.tempFilePath),
-          fail: () => resolve(filePath) // 压缩失败则用原图
+          fail: () => resolve(filePath)
         })
       })
 
-      // 1. 获取上传凭证（cosKey、photoId）
       const ticket = await photoService.createUploadTicket({
         filename,
         mimeType,
@@ -107,12 +109,10 @@ Page({
         takenAt: null
       })
 
-      // 2. 上传压缩后的图片到微信云存储
       const uploadRes = await photoService.uploadToCOS(ticket, compressedPath, (progress) => {
         this.setData({ uploadProgress: progress })
       })
 
-      // 3. 确认上传，把 fileID 一并传给云函数写库
       await photoService.confirmUpload({
         photoId: ticket.photoId,
         cosKey: ticket.cosKey,
@@ -123,7 +123,9 @@ Page({
         mimeType,
         width: file.width || 0,
         height: file.height || 0,
-        takenAt: null
+        takenAt: null,
+        latitude,
+        longitude
       })
 
       toast.showSuccess('上传成功')
@@ -142,5 +144,9 @@ Page({
 
   goRecycle() {
     wx.navigateTo({ url: '/pages/gallery/recycle' })
+  },
+
+  goMap() {
+    wx.navigateTo({ url: '/pages/gallery/map' })
   }
 })

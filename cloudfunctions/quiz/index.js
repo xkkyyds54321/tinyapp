@@ -139,11 +139,13 @@ async function getTodayQuiz(event, openid) {
   const qIndex = daysSinceEpoch(now) % QUESTIONS.length
   const question = { index: qIndex, content: QUESTIONS[qIndex] }
 
-  const answersRes = await db.collection('quiz_answers')
-    .where({ coupleId, dateKey: today, isDeleted: false })
-    .get()
-
-  const answers = answersRes.data
+  let answers = []
+  try {
+    const answersRes = await db.collection('quiz_answers')
+      .where({ coupleId, dateKey: today, isDeleted: false })
+      .get()
+    answers = answersRes.data
+  } catch (e) { /* 集合尚未创建，视为无记录 */ }
   const myAnswer = answers.find(a => a.openid === openid) || null
   const partnerAnswer = answers.find(a => a.openid !== openid) || null
   const bothAnswered = !!(myAnswer && partnerAnswer)
@@ -169,10 +171,12 @@ async function submitAnswer(event, openid) {
   const today = dateKey(now)
   const qIndex = daysSinceEpoch(now) % QUESTIONS.length
 
-  const existing = await db.collection('quiz_answers')
-    .where({ coupleId, dateKey: today, openid, isDeleted: false })
-    .limit(1).get()
-  if (existing.data.length) return resp(QUIZ_ALREADY_ANSWERED, '今天已经回答过了')
+  try {
+    const existing = await db.collection('quiz_answers')
+      .where({ coupleId, dateKey: today, openid, isDeleted: false })
+      .limit(1).get()
+    if (existing.data.length) return resp(QUIZ_ALREADY_ANSWERED, '今天已经回答过了')
+  } catch (e) { /* 集合尚未创建，允许继续写入 */ }
 
   await db.collection('quiz_answers').add({
     data: {
@@ -194,14 +198,18 @@ async function listHistory(event, openid) {
   const coupleId = await getCoupleId(openid)
   if (!coupleId) return resp(COUPLE_NOT_BOUND, '未绑定伴侣')
 
-  const allRes = await db.collection('quiz_answers')
-    .where({ coupleId, isDeleted: false })
-    .orderBy('dateKey', 'desc')
-    .limit(500)
-    .get()
+  let allData = []
+  try {
+    const allRes = await db.collection('quiz_answers')
+      .where({ coupleId, isDeleted: false })
+      .orderBy('dateKey', 'desc')
+      .limit(500)
+      .get()
+    allData = allRes.data
+  } catch (e) { /* 集合尚未创建 */ }
 
   const byDate = {}
-  allRes.data.forEach(a => {
+  allData.forEach(a => {
     if (!byDate[a.dateKey]) byDate[a.dateKey] = []
     byDate[a.dateKey].push(a)
   })

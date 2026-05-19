@@ -15,7 +15,7 @@
       bindtap="onPreview"
     />
 
-    <!-- 信息 -->
+    <!-- 基础信息 -->
     <view class="detail-info card">
       <view class="info-row">
         <text class="info-label">上传者</text>
@@ -28,6 +28,67 @@
       <view class="info-row" wx:if="{{photo.size}}">
         <text class="info-label">大小</text>
         <text class="info-value">{{sizeText}}</text>
+      </view>
+      <view class="info-row" wx:if="{{locationText}}">
+        <text class="info-label">位置</text>
+        <text class="info-value location-text">📍 {{locationText}}</text>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="note-section card">
+      <view class="note-header">
+        <text class="section-title">备注</text>
+        <text class="note-edit-btn" bindtap="onEditNote" wx:if="{{!editingNote}}">✏️ 编辑</text>
+      </view>
+
+      <!-- 查看态 -->
+      <view wx:if="{{!editingNote}}">
+        <view class="note-text" wx:if="{{photo.note}}">{{photo.note}}</view>
+        <view class="note-empty" wx:else>点击编辑添加备注...</view>
+      </view>
+
+      <!-- 编辑态 -->
+      <view wx:else>
+        <textarea
+          class="note-textarea"
+          value="{{noteInput}}"
+          placeholder="写点什么吧..."
+          maxlength="200"
+          auto-height
+          bindinput="onNoteInput"
+        />
+        <view class="note-actions">
+          <text class="note-cancel-btn" bindtap="onCancelNote">取消</text>
+          <button class="note-save-btn btn-primary" size="mini" loading="{{savingNote}}" bindtap="onSaveNote">保存</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 标签 -->
+    <view class="tags-section card">
+      <view class="section-title">标签</view>
+      <view class="tags-wrap">
+        <view
+          class="tag tag-item"
+          wx:for="{{photo.tags}}"
+          wx:key="*this"
+        >
+          <text>{{item}}</text>
+          <text class="tag-remove" data-idx="{{index}}" bindtap="onRemoveTag">×</text>
+        </view>
+        <view class="tag-add-wrap" wx:if="{{canAddTag}}">
+          <input
+            class="tag-input"
+            placeholder="添加标签"
+            value="{{tagInput}}"
+            maxlength="10"
+            confirm-type="done"
+            bindinput="onTagInput"
+            bindconfirm="onAddTag"
+          />
+          <text class="tag-add-btn" bindtap="onAddTag">+ 添加</text>
+        </view>
       </view>
     </view>
 

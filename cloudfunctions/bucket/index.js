@@ -23,13 +23,17 @@ async function listItems(event, openid) {
   const coupleId = await getCoupleId(openid)
   if (!coupleId) return resp(COUPLE_NOT_BOUND, '未绑定伴侣')
 
-  const res = await db.collection('bucket_items')
-    .where({ coupleId, isDeleted: false })
-    .orderBy('completedAt', 'desc')
-    .limit(200)
-    .get()
+  let rawData = []
+  try {
+    const res = await db.collection('bucket_items')
+      .where({ coupleId, isDeleted: false })
+      .orderBy('completedAt', 'desc')
+      .limit(200)
+      .get()
+    rawData = res.data
+  } catch (e) { /* 集合尚未创建，返回空列表 */ }
 
-  const fileIDs = res.data
+  const fileIDs = rawData
     .map(i => i.photoFileID)
     .filter(f => f && f.startsWith('cloud://'))
 
@@ -41,7 +45,7 @@ async function listItems(event, openid) {
     } catch (e) {}
   }
 
-  const items = res.data.map(i => ({
+  const items = rawData.map(i => ({
     ...i,
     photoUrl: urlMap[i.photoFileID] || i.photoFileID || ''
   }))

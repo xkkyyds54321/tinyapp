@@ -10,7 +10,7 @@
     <text class="{{changingCover ? 'cover-fab-loading' : 'cover-fab-icon'}}">{{changingCover ? '…' : '📷'}}</text>
   </view>
 
-  <!-- 情侣头部区（顶部固定区） -->
+  <!-- 情侣头部区 -->
   <view class="top-area" style="padding-top: calc({{statusBarHeight}}px + 60rpx)">
 
     <!-- 加载态 -->
@@ -48,9 +48,29 @@
         <view class="couple-id">ID: {{partner.openid ? partner.openid.slice(-6) : '------'}}</view>
       </view>
     </view>
+
+    <!-- 里程碑庆祝横幅 -->
+    <view class="milestone-banner" wx:if="{{!loading && !error && milestoneText}}">
+      <text class="milestone-text">{{milestoneText}}</text>
+    </view>
+
+    <!-- 纪念日即将到来提醒 -->
+    <view class="reminder-list" wx:if="{{!loading && !error && upcomingAnniversaries.length}}">
+      <view
+        class="reminder-item"
+        wx:for="{{upcomingAnniversaries}}"
+        wx:key="_id"
+        bindtap="goAnniversaries"
+      >
+        <text class="reminder-icon">🔔</text>
+        <text class="reminder-text">
+          {{item._daysLeft === 0 ? '今天是「' + item.title + '」🎉' : item._daysLeft + ' 天后「' + item.title + '」'}}
+        </text>
+      </view>
+    </view>
   </view>
 
-  <!-- 底部功能网格（2×2） -->
+  <!-- 底部功能网格（3×2 = 6格） -->
   <view class="feature-grid" wx:if="{{!loading && !error}}">
     <view class="feature-item" bindtap="goTrack">
       <text class="feature-icon">📍</text>
@@ -67,6 +87,18 @@
     <view class="feature-item" bindtap="goLetters">
       <text class="feature-icon">💌</text>
       <text class="feature-label">未来情书</text>
+    </view>
+    <view class="feature-item" bindtap="goMood">
+      <text class="feature-icon">🌈</text>
+      <text class="feature-label">心情日记</text>
+    </view>
+    <view class="feature-item" bindtap="goPromises">
+      <text class="feature-icon">🤝</text>
+      <text class="feature-label">我们的约定</text>
+    </view>
+    <view class="feature-item" bindtap="goBills">
+      <text class="feature-icon">💸</text>
+      <text class="feature-label">共同账本</text>
     </view>
   </view>
 

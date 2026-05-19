@@ -17,7 +17,8 @@ Page({
     mapCenter: { latitude: 39.9042, longitude: 116.4074 },
     scale: 14,
     locationGranted: false,
-    loading: false
+    loading: false,
+    permissionTip: false
   },
 
   _reportTimer: null,
@@ -29,7 +30,8 @@ Page({
       wx.navigateTo({ url: '/pages/bind/index' })
       return
     }
-    await this.requestPermission()
+    // 定位权限需在微信公众平台「接口设置」申请后方可使用
+    this.setData({ locationGranted: false, permissionTip: true })
   },
 
   onUnload() {
@@ -72,11 +74,7 @@ Page({
   _startTracking() {
     this._stopAll()
     wx.onLocationChange(this._onLocationChange.bind(this))
-    try {
-      wx.startLocationUpdateBackground({ type: 'gcj02' })
-    } catch (e) {
-      wx.startLocationUpdate({ type: 'gcj02' })
-    }
+    wx.startLocationUpdate({ type: 'gcj02' })
     this._pollTimer = setInterval(() => this._pollPartner(), POLL_INTERVAL)
     this._pollPartner()
   },

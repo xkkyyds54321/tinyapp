@@ -125,29 +125,34 @@ async function confirmUpload(openid, event) {
   const existing = await photosCol.where({ _id: photoId }).get().catch(() => ({ data: [] }))
   if (existing.data.length > 0) return resp(PHOTO_ALREADY_CONFIRMED, '照片已存在')
 
+  const { latitude, longitude } = event
   const now = Date.now()
-  await photosCol.add({
-    data: {
-      _id: photoId,
-      coupleId,
-      uploadedBy: openid,
-      cosKey: key,
-      thumbnailKey,
-      fileID: fileID || '',   // 微信云存储 fileID
-      originalName: originalName || '',
-      size: size || 0,
-      mimeType: mimeType || 'image/jpeg',
-      width: width || 0,
-      height: height || 0,
-      takenAt: takenAt || null,
-      createdAt: now,
-      updatedAt: now,
-      isDeleted: false,
-      deletedAt: null,
-      deletedBy: null,
-      version: 1
-    }
-  })
+  const photoData = {
+    _id: photoId,
+    coupleId,
+    uploadedBy: openid,
+    cosKey: key,
+    thumbnailKey,
+    fileID: fileID || '',
+    originalName: originalName || '',
+    size: size || 0,
+    mimeType: mimeType || 'image/jpeg',
+    width: width || 0,
+    height: height || 0,
+    takenAt: takenAt || null,
+    createdAt: now,
+    updatedAt: now,
+    isDeleted: false,
+    deletedAt: null,
+    deletedBy: null,
+    note: '',
+    tags: [],
+    version: 1
+  }
+  if (latitude && longitude) {
+    photoData.location = { latitude, longitude }
+  }
+  await photosCol.add({ data: photoData })
 
   return resp(OK, '上传成功', { photoId })
 }
@@ -237,6 +242,29 @@ async function restorePhoto(openid, event) {
   return resp(OK, '已恢复')
 }
 
+async function updatePhotoNote(openid, event) {
+  const { photoId, note, tags } = event
+  if (!photoId) return resp(UNKNOWN, '缺少 photoId')
+
+  const { coupleId } = await getUserWithCouple(openid)
+  if (!coupleId) return resp(COUPLE_NOT_BOUND, '请先绑定情侣空间')
+
+  const { data } = await photosCol.where({ _id: photoId, coupleId, isDeleted: false }).get()
+  if (!data.length) return resp(PHOTO_NOT_FOUND, '照片不存在')
+
+  const updateData = { updatedAt: Date.now() }
+  if (note !== undefined) updateData.note = String(note || '').slice(0, 200)
+  if (tags !== undefined) {
+    updateData.tags = (Array.isArray(tags) ? tags : [])
+      .filter(t => typeof t === 'string' && t.trim())
+      .map(t => t.trim().slice(0, 10))
+      .slice(0, 5)
+  }
+
+  await photosCol.doc(photoId).update({ data: updateData })
+  return resp(OK, '已保存')
+}
+
 async function listRecycleBin(openid, event) {
   const { page = 1, pageSize = 20 } = event
   const { coupleId } = await getUserWithCouple(openid)
@@ -253,6 +281,19 @@ async function listRecycleBin(openid, event) {
   return resp(OK, 'ok', { list: data, total: total.total, page, pageSize })
 }
 
+async function listPhotosWithLocation(openid, event) {
+  const { coupleId } = await getUserWithCouple(openid)
+  if (!coupleId) return resp(COUPLE_NOT_BOUND, '请先绑定情侣空间')
+
+  const { data } = await photosCol
+    .where({ coupleId, isDeleted: false, 'location.latitude': db.command.exists(true) })
+    .orderBy('createdAt', 'desc')
+    .limit(200)
+    .get()
+
+  return resp(OK, 'ok', { list: data })
+}
+
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   const openid = wxContext.OPENID
@@ -267,6 +308,8 @@ exports.main = async (event, context) => {
       case 'deletePhoto': return await deletePhoto(openid, event)
       case 'restorePhoto': return await restorePhoto(openid, event)
       case 'listRecycleBin': return await listRecycleBin(openid, event)
+      case 'updatePhotoNote': return await updatePhotoNote(openid, event)
+      case 'listPhotosWithLocation': return await listPhotosWithLocation(openid, event)
       default: return resp(UNKNOWN, '未知 action')
     }
   } catch (err) {

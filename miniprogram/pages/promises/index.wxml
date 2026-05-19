@@ -1,0 +1,101 @@
+<!-- pages/promises/index.wxml -->
+<view class="container">
+
+  <view class="page-header">
+    <text class="page-title">我们的约定</text>
+    <button class="add-btn btn-primary" bindtap="onShowAdd">+ 新约定</button>
+  </view>
+
+  <!-- 加载态 -->
+  <view class="loading-wrap" wx:if="{{loading && !pending.length && !done.length}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 空态 -->
+  <view class="empty-wrap" wx:elif="{{!pending.length && !done.length && !loading}}">
+    <view class="empty-icon">🤝</view>
+    <view class="empty-text">还没有约定</view>
+    <view class="empty-sub">和 TA 一起立下承诺吧</view>
+  </view>
+
+  <block wx:else>
+    <!-- 待完成 -->
+    <view wx:if="{{pending.length}}">
+      <view class="section-label">待完成 ({{pending.length}})</view>
+      <view class="promise-list">
+        <view
+          class="promise-item card"
+          wx:for="{{pending}}"
+          wx:key="_id"
+        >
+          <view class="promise-check" data-id="{{item._id}}" bindtap="onToggle">
+            <view class="check-circle" />
+          </view>
+          <view class="promise-body">
+            <view class="promise-content">{{item.content}}</view>
+            <view class="promise-meta">
+              <text class="promise-creator">{{item.creatorName}} 创建</text>
+              <text class="promise-due" wx:if="{{item.dueDate}}">· 截止 {{item.dueDate}}</text>
+            </view>
+          </view>
+          <text class="promise-delete" wx:if="{{item.isMine}}" data-id="{{item._id}}" bindtap="onDelete">×</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 已完成 -->
+    <view wx:if="{{done.length}}">
+      <view class="section-label done-label">已完成 ({{done.length}})</view>
+      <view class="promise-list">
+        <view
+          class="promise-item promise-done card"
+          wx:for="{{done}}"
+          wx:key="_id"
+        >
+          <view class="promise-check done-check" data-id="{{item._id}}" bindtap="onToggle">
+            <view class="check-circle-done">✓</view>
+          </view>
+          <view class="promise-body">
+            <view class="promise-content done-content">{{item.content}}</view>
+            <view class="promise-meta">
+              <text class="promise-creator">{{item.doneByName}} 完成</text>
+            </view>
+          </view>
+          <text class="promise-delete" wx:if="{{item.isMine}}" data-id="{{item._id}}" bindtap="onDelete">×</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+</view>
+
+<!-- 新建约定弹窗 -->
+<view class="modal-mask" wx:if="{{showAddModal}}" bindtap="onCloseAdd">
+  <view class="modal-box" catchtap="noop">
+    <view class="modal-title">新约定</view>
+
+    <view class="form-item">
+      <text class="form-label">约定内容</text>
+      <textarea
+        class="content-textarea"
+        placeholder="写下你们的约定..."
+        value="{{contentInput}}"
+        maxlength="100"
+        auto-height
+        bindinput="onContentInput"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="form-label">截止日期（可选）</text>
+      <picker mode="date" value="{{dueDateInput}}" bindchange="onDueDateChange">
+        <view class="date-picker-btn">{{dueDateInput || '不设置'}}</view>
+      </picker>
+    </view>
+
+    <view class="modal-btns">
+      <button class="btn-ghost modal-btn-cancel" bindtap="onCloseAdd">取消</button>
+      <button class="btn-primary modal-btn-ok" loading="{{submitting}}" bindtap="onSubmit">创建</button>
+    </view>
+  </view>
+</view>

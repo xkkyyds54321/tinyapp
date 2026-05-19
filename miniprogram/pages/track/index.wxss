@@ -76,3 +76,24 @@
 .info-dot.error { background: #ff4d4f; }
 
 .info-text { font-size: 28rpx; color: #333; }
+
+.permission-tip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background: rgba(255,255,255,0.95);
+  border-radius: 24rpx;
+  padding: 48rpx 40rpx;
+  width: 560rpx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0,0,0,0.12);
+}
+.tip-icon { font-size: 64rpx; }
+.tip-title { font-size: 32rpx; font-weight: 600; color: #333; }
+.tip-desc { font-size: 26rpx; color: #999; text-align: center; line-height: 1.6; }

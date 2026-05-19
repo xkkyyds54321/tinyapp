@@ -12,7 +12,11 @@
     "pages/track/index",
     "pages/quiz/index",
     "pages/bucket/index",
-    "pages/letters/index"
+    "pages/letters/index",
+    "pages/mood/index",
+    "pages/bills/index",
+    "pages/promises/index",
+    "pages/gallery/map"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -23,13 +27,9 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "用于显示你和 TA 的位置"
-    },
-    "scope.userLocationBackground": {
-      "desc": "用于后台持续记录轨迹"
+      "desc": "用于记录照片拍摄位置和情侣轨迹"
     }
   },
-  "requiredBackgroundModes": ["location"],
   "tabBar": {
     "color": "#999",
     "selectedColor": "#ff7eb3",
@@ -69,6 +69,7 @@
     ]
   },
   "cloud": true,
+  "lazyCodeLoading": "requiredComponents",
   "sitemapLocation": "sitemap.json",
   "style": "v2"
 }

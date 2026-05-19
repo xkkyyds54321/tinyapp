@@ -18,6 +18,13 @@
     show-location
   />
 
+  <!-- 定位权限未开通提示 -->
+  <view class="permission-tip" wx:if="{{permissionTip}}">
+    <text class="tip-icon">📍</text>
+    <text class="tip-title">情侣轨迹暂不可用</text>
+    <text class="tip-desc">该功能需要在微信公众平台申请定位接口权限，开通后即可使用</text>
+  </view>
+
   <!-- Realtime info overlay -->
   <view class="info-overlay" wx:if="{{tab === 'realtime'}}">
     <view class="info-row" wx:if="{{partnerLocation}}">
